@@ -2,9 +2,11 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
 
 <title>Fashion Gallery | Online Shopping</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
 *{
@@ -19,16 +21,22 @@ body{
     color:#222;
 }
 
-/* TOP BAR */
+button,input,textarea{
+    font-family:inherit;
+}
 
+button{
+    cursor:pointer;
+}
+
+/* TOP BAR */
 .topbar{
     background:#f85606;
     color:white;
     padding:9px 6%;
-    font-size:13px;
     display:flex;
     justify-content:space-between;
-    align-items:center;
+    font-size:13px;
 }
 
 .topbar a{
@@ -38,18 +46,17 @@ body{
 }
 
 /* HEADER */
-
 .header{
     background:white;
-    padding:18px 6%;
+    padding:17px 6%;
     display:flex;
     align-items:center;
-    gap:30px;
-    box-shadow:0 1px 5px rgba(0,0,0,.08);
+    gap:25px;
+    box-shadow:0 1px 6px rgba(0,0,0,.08);
 }
 
 .logo{
-    font-size:29px;
+    font-size:28px;
     font-weight:800;
     color:#f85606;
     white-space:nowrap;
@@ -61,59 +68,56 @@ body{
 
 .search{
     flex:1;
-    display:flex;
-    max-width:650px;
+    max-width:700px;
     margin:auto;
+    display:flex;
 }
 
 .search input{
     width:100%;
-    border:none;
-    outline:none;
+    border:0;
+    outline:0;
     background:#f3f3f3;
-    padding:14px 18px;
-    font-size:15px;
+    padding:14px 17px;
     border-radius:7px 0 0 7px;
+    font-size:15px;
 }
 
 .search button{
     width:60px;
-    border:none;
+    border:0;
     background:#f85606;
     color:white;
     font-size:20px;
     border-radius:0 7px 7px 0;
-    cursor:pointer;
 }
 
 .header-actions{
     display:flex;
-    gap:22px;
+    gap:20px;
     align-items:center;
 }
 
 .header-action{
-    cursor:pointer;
     text-align:center;
-    font-size:13px;
+    font-size:12px;
+    cursor:pointer;
     white-space:nowrap;
 }
 
 .header-action .icon{
-    font-size:24px;
     display:block;
+    font-size:23px;
     margin-bottom:3px;
 }
 
-/* NAVIGATION */
-
+/* NAV */
 .nav{
     background:white;
     border-top:1px solid #eee;
     padding:12px 6%;
     display:flex;
-    align-items:center;
-    gap:30px;
+    gap:28px;
     overflow:auto;
 }
 
@@ -129,7 +133,6 @@ body{
 }
 
 /* MAIN */
-
 .container{
     width:88%;
     max-width:1400px;
@@ -137,7 +140,6 @@ body{
 }
 
 /* HERO */
-
 .hero{
     margin-top:18px;
     height:330px;
@@ -145,7 +147,7 @@ body{
     overflow:hidden;
     position:relative;
     background:
-    linear-gradient(90deg,rgba(0,0,0,.7),rgba(0,0,0,.1)),
+    linear-gradient(90deg,rgba(0,0,0,.75),rgba(0,0,0,.1)),
     url("https://images.unsplash.com/photo-1445205170230-053b83016050?auto=format&fit=crop&w=1600&q=85")
     center/cover;
 }
@@ -158,7 +160,7 @@ body{
 }
 
 .hero-content small{
-    font-size:16px;
+    font-size:15px;
     letter-spacing:2px;
 }
 
@@ -169,21 +171,19 @@ body{
 
 .hero-content p{
     font-size:18px;
-    margin-bottom:25px;
+    margin-bottom:22px;
 }
 
 .hero-btn{
-    border:none;
-    padding:13px 28px;
+    border:0;
     background:#f85606;
     color:white;
+    padding:13px 27px;
     border-radius:5px;
     font-weight:bold;
-    cursor:pointer;
 }
 
 /* SERVICES */
-
 .services{
     background:white;
     margin-top:15px;
@@ -202,7 +202,7 @@ body{
 }
 
 .service:last-child{
-    border:none;
+    border:0;
 }
 
 .service-icon{
@@ -220,7 +220,6 @@ body{
 }
 
 /* SECTION */
-
 .section{
     margin-top:30px;
 }
@@ -234,17 +233,14 @@ body{
 
 .section-title{
     font-size:25px;
-    font-weight:600;
 }
 
 .view-all{
     color:#f85606;
     font-size:14px;
-    cursor:pointer;
 }
 
 /* CATEGORIES */
-
 .categories{
     display:grid;
     grid-template-columns:repeat(8,1fr);
@@ -266,16 +262,15 @@ body{
 }
 
 .category-icon{
-    font-size:42px;
-    margin-bottom:10px;
+    font-size:38px;
+    margin-bottom:8px;
 }
 
 .category p{
     font-size:13px;
 }
 
-/* FLASH SALE */
-
+/* FLASH */
 .flash{
     background:white;
     border-radius:8px;
@@ -283,10 +278,10 @@ body{
 }
 
 .flash-head{
-    padding:18px 20px;
+    padding:17px 20px;
     display:flex;
-    align-items:center;
     justify-content:space-between;
+    align-items:center;
     border-bottom:1px solid #eee;
 }
 
@@ -298,8 +293,8 @@ body{
 
 .timer{
     display:flex;
-    align-items:center;
     gap:7px;
+    align-items:center;
     font-size:14px;
 }
 
@@ -312,11 +307,11 @@ body{
 }
 
 /* PRODUCTS */
-
 .products{
     display:grid;
     grid-template-columns:repeat(5,1fr);
     gap:12px;
+    padding:15px;
 }
 
 .product{
@@ -324,8 +319,8 @@ body{
     border-radius:7px;
     overflow:hidden;
     position:relative;
-    cursor:pointer;
     transition:.2s;
+    border:1px solid #eee;
 }
 
 .product:hover{
@@ -368,11 +363,10 @@ body{
     right:8px;
     width:32px;
     height:32px;
-    border:none;
+    border:0;
     background:white;
     border-radius:50%;
     font-size:18px;
-    cursor:pointer;
     box-shadow:0 2px 7px rgba(0,0,0,.15);
 }
 
@@ -383,8 +377,7 @@ body{
 .product-name{
     font-size:14px;
     line-height:20px;
-    height:40px;
-    overflow:hidden;
+    min-height:40px;
 }
 
 .rating{
@@ -425,7 +418,6 @@ body{
     padding:9px;
     margin-top:10px;
     border-radius:4px;
-    cursor:pointer;
     font-weight:bold;
 }
 
@@ -434,14 +426,28 @@ body{
     color:white;
 }
 
-/* PROMO */
+/* LOADING */
+.loading{
+    grid-column:1/-1;
+    text-align:center;
+    padding:60px;
+    color:#777;
+}
 
+.empty{
+    grid-column:1/-1;
+    text-align:center;
+    padding:60px;
+    color:#777;
+}
+
+/* PROMO */
 .promo{
     margin-top:30px;
     height:180px;
     border-radius:8px;
     background:
-    linear-gradient(90deg,#111,rgba(0,0,0,.35)),
+    linear-gradient(90deg,#111,rgba(0,0,0,.3)),
     url("https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&fit=crop&w=1500&q=85")
     center/cover;
     display:flex;
@@ -459,7 +465,6 @@ body{
 }
 
 /* FOOTER */
-
 .footer{
     background:#222;
     color:white;
@@ -480,7 +485,6 @@ body{
 
 .footer h3{
     margin-bottom:15px;
-    font-size:16px;
 }
 
 .footer p,
@@ -501,8 +505,7 @@ body{
     font-size:12px;
 }
 
-/* CART POPUP */
-
+/* CART MESSAGE */
 .cart-message{
     position:fixed;
     right:20px;
@@ -512,11 +515,189 @@ body{
     padding:15px 20px;
     border-radius:7px;
     display:none;
-    z-index:999;
+    z-index:99999;
+}
+
+/* ADMIN BUTTON */
+.admin-button{
+    position:fixed;
+    bottom:20px;
+    left:20px;
+    z-index:9999;
+    background:#f85606;
+    color:white;
+    border:0;
+    padding:12px 18px;
+    border-radius:7px;
+    font-weight:bold;
+    box-shadow:0 4px 15px rgba(0,0,0,.25);
+}
+
+/* MODAL */
+.modal{
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.75);
+    z-index:10000;
+    display:none;
+    overflow:auto;
+    padding:30px 15px;
+}
+
+.modal.show{
+    display:block;
+}
+
+.modal-box{
+    background:white;
+    max-width:850px;
+    margin:auto;
+    border-radius:12px;
+    overflow:hidden;
+}
+
+.modal-header{
+    background:#f85606;
+    color:white;
+    padding:17px 22px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.modal-close{
+    width:35px;
+    height:35px;
+    border:0;
+    border-radius:50%;
+    background:white;
+    font-size:18px;
+}
+
+.modal-body{
+    padding:25px;
+}
+
+.form-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+}
+
+.form-group{
+    margin-bottom:5px;
+}
+
+.form-group.full{
+    grid-column:1/-1;
+}
+
+.form-group label{
+    display:block;
+    font-size:13px;
+    font-weight:bold;
+    margin-bottom:5px;
+}
+
+.form-group input,
+.form-group textarea{
+    width:100%;
+    padding:11px;
+    border:1px solid #ddd;
+    border-radius:6px;
+    outline:none;
+}
+
+.form-group textarea{
+    height:80px;
+    resize:vertical;
+}
+
+.admin-add-btn{
+    width:100%;
+    background:#f85606;
+    color:white;
+    border:0;
+    padding:13px;
+    border-radius:6px;
+    margin-top:15px;
+    font-weight:bold;
+}
+
+/* ADMIN LIST */
+.admin-list{
+    margin-top:25px;
+}
+
+.admin-product{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    padding:12px;
+    border:1px solid #eee;
+    border-radius:8px;
+    margin:8px 0;
+}
+
+.admin-product img{
+    width:65px;
+    height:65px;
+    object-fit:cover;
+    border-radius:6px;
+}
+
+.admin-product-info{
+    flex:1;
+    display:flex;
+    flex-direction:column;
+    gap:4px;
+}
+
+.edit-btn,
+.delete-btn{
+    border:0;
+    padding:8px 12px;
+    border-radius:5px;
+}
+
+.edit-btn{
+    background:#eee;
+}
+
+.delete-btn{
+    background:#ffe5e5;
+    color:#d00000;
+}
+
+/* LOGIN */
+.login-box{
+    max-width:430px;
+}
+
+.login-body{
+    padding:25px;
+}
+
+.login-body input{
+    width:100%;
+    padding:13px;
+    margin-bottom:12px;
+    border:1px solid #ddd;
+    border-radius:6px;
+    outline:none;
+}
+
+.login-btn{
+    width:100%;
+    padding:13px;
+    border:0;
+    border-radius:6px;
+    background:#f85606;
+    color:white;
+    font-weight:bold;
 }
 
 /* MOBILE */
-
 @media(max-width:1000px){
 
     .products{
@@ -530,10 +711,6 @@ body{
     .services{
         grid-template-columns:repeat(2,1fr);
     }
-
-    .service:nth-child(2){
-        border:none;
-    }
 }
 
 @media(max-width:700px){
@@ -545,7 +722,7 @@ body{
     .header{
         padding:12px 4%;
         flex-wrap:wrap;
-        gap:12px;
+        gap:10px;
     }
 
     .logo{
@@ -593,10 +770,6 @@ body{
         font-size:14px;
     }
 
-    .services{
-        grid-template-columns:1fr 1fr;
-    }
-
     .categories{
         grid-template-columns:repeat(4,1fr);
         gap:7px;
@@ -617,14 +790,15 @@ body{
     .products{
         grid-template-columns:repeat(2,1fr);
         gap:8px;
+        padding:8px;
     }
 
     .product-img{
         height:190px;
     }
 
-    .section-title{
-        font-size:20px;
+    .services{
+        grid-template-columns:1fr 1fr;
     }
 
     .promo{
@@ -640,6 +814,18 @@ body{
         grid-template-columns:1fr 1fr;
         gap:25px;
     }
+
+    .form-grid{
+        grid-template-columns:1fr;
+    }
+
+    .form-group.full{
+        grid-column:auto;
+    }
+
+    .admin-product{
+        flex-wrap:wrap;
+    }
 }
 </style>
 </head>
@@ -651,7 +837,6 @@ body{
     <div>Welcome to Fashion Gallery 🎉</div>
 
     <div>
-        <a href="#">Save More on App</a>
         <a href="#">Help Center</a>
         <a href="#">Track My Order</a>
     </div>
@@ -670,7 +855,7 @@ body{
             id="searchInput"
             type="text"
             placeholder="Search products, brands and categories..."
-            onkeyup="searchProducts()"
+            oninput="searchProducts()"
         >
 
         <button onclick="searchProducts()">🔍</button>
@@ -678,9 +863,9 @@ body{
 
     <div class="header-actions">
 
-        <div class="header-action">
+        <div class="header-action" onclick="openLogin()">
             <span class="icon">👤</span>
-            <span>Login / Register</span>
+            <span id="accountText">Login / Register</span>
         </div>
 
         <div class="header-action">
@@ -700,23 +885,19 @@ body{
 
 <!-- NAV -->
 <nav class="nav">
-
     <a href="#">Home</a>
-    <a href="#">Categories</a>
-    <a href="#">Men's Fashion</a>
-    <a href="#">Women's Fashion</a>
-    <a href="#">T-Shirts</a>
-    <a href="#">Shirts</a>
-    <a href="#">Pants</a>
-    <a href="#">Shoes</a>
-    <a href="#">Accessories</a>
-    <a href="#">Flash Sale 🔥</a>
-
+    <a href="#categories">Categories</a>
+    <a href="#" onclick="filterCategory('Men')">Men's Fashion</a>
+    <a href="#" onclick="filterCategory('Women')">Women's Fashion</a>
+    <a href="#" onclick="filterCategory('T-Shirts')">T-Shirts</a>
+    <a href="#" onclick="filterCategory('Shirts')">Shirts</a>
+    <a href="#" onclick="filterCategory('Pants')">Pants</a>
+    <a href="#" onclick="filterCategory('Shoes')">Shoes</a>
+    <a href="#products">All Products</a>
 </nav>
 
 
 <main class="container">
-
 
 <!-- HERO -->
 <section class="hero">
@@ -725,11 +906,19 @@ body{
 
         <small>FASHION GALLERY</small>
 
-        <h1>New Style.<br>New You.</h1>
+        <h1>
+            New Style.<br>
+            New You.
+        </h1>
 
-        <p>Discover premium fashion at amazing prices.</p>
+        <p>
+            Discover premium fashion at amazing prices.
+        </p>
 
-        <button class="hero-btn">
+        <button
+            class="hero-btn"
+            onclick="document.getElementById('products').scrollIntoView()"
+        >
             SHOP NOW →
         </button>
 
@@ -744,8 +933,8 @@ body{
     <div class="service">
         <div class="service-icon">🚚</div>
         <div>
-            <h4>Free Delivery</h4>
-            <p>On selected orders</p>
+            <h4>Fast Delivery</h4>
+            <p>Quick delivery service</p>
         </div>
     </div>
 
@@ -777,51 +966,53 @@ body{
 
 
 <!-- CATEGORIES -->
-<section class="section">
+<section class="section" id="categories">
 
     <div class="section-header">
         <h2 class="section-title">Categories</h2>
-        <span class="view-all">View All →</span>
+        <span class="view-all" onclick="loadProducts()">
+            View All →
+        </span>
     </div>
 
     <div class="categories">
 
-        <div class="category">
+        <div class="category" onclick="filterCategory('T-Shirts')">
             <div class="category-icon">👕</div>
             <p>T-Shirts</p>
         </div>
 
-        <div class="category">
+        <div class="category" onclick="filterCategory('Shirts')">
             <div class="category-icon">👔</div>
             <p>Shirts</p>
         </div>
 
-        <div class="category">
+        <div class="category" onclick="filterCategory('Pants')">
             <div class="category-icon">👖</div>
             <p>Pants</p>
         </div>
 
-        <div class="category">
+        <div class="category" onclick="filterCategory('Women')">
             <div class="category-icon">👗</div>
             <p>Women's</p>
         </div>
 
-        <div class="category">
+        <div class="category" onclick="filterCategory('Shoes')">
             <div class="category-icon">👟</div>
             <p>Shoes</p>
         </div>
 
-        <div class="category">
+        <div class="category" onclick="filterCategory('Jackets')">
             <div class="category-icon">🧥</div>
             <p>Jackets</p>
         </div>
 
-        <div class="category">
+        <div class="category" onclick="filterCategory('Bags')">
             <div class="category-icon">👜</div>
             <p>Bags</p>
         </div>
 
-        <div class="category">
+        <div class="category" onclick="filterCategory('Accessories')">
             <div class="category-icon">🕶️</div>
             <p>Accessories</p>
         </div>
@@ -831,15 +1022,30 @@ body{
 </section>
 
 
-<!-- FLASH SALE -->
-<section class="section">
+<!-- PRODUCTS -->
+<section class="section" id="products">
+
+    <div class="section-header">
+
+        <h2 class="section-title">
+            Latest Products
+        </h2>
+
+        <span
+            class="view-all"
+            onclick="loadProducts()"
+        >
+            View All →
+        </span>
+
+    </div>
 
     <div class="flash">
 
         <div class="flash-head">
 
             <div class="flash-title">
-                ⚡ FLASH SALE
+                ⚡ FASHION DEALS
             </div>
 
             <div class="timer">
@@ -848,226 +1054,18 @@ body{
                 <span class="time-box" id="hours">08</span> :
                 <span class="time-box" id="minutes">42</span> :
                 <span class="time-box" id="seconds">35</span>
+
             </div>
 
         </div>
 
-
-        <div class="products" style="padding:15px;">
-
-
-            <!-- PRODUCT 1 -->
-            <div class="product">
-
-                <div class="product-img">
-
-                    <img src="https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=700&q=80">
-
-                    <span class="discount">-35%</span>
-
-                    <button class="wishlist"
-                    onclick="event.stopPropagation();wishlist(this)">
-                        ♡
-                    </button>
-
-                </div>
-
-                <div class="product-info">
-
-                    <div class="product-name">
-                        Premium Cotton Oversized T-Shirt
-                    </div>
-
-                    <div class="rating">
-                        ★★★★★ <span>(128)</span>
-                    </div>
-
-                    <span class="price">৳650</span>
-                    <span class="old-price">৳999</span>
-
-                    <div class="sold">
-                        320 sold
-                    </div>
-
-                    <button class="add-cart"
-                    onclick="addToCart('Premium Cotton Oversized T-Shirt')">
-                        🛒 Add to Cart
-                    </button>
-
-                </div>
-
-            </div>
-
-
-            <!-- PRODUCT 2 -->
-            <div class="product">
-
-                <div class="product-img">
-
-                    <img src="https://images.unsplash.com/photo-1603252109303-2751441dd157?auto=format&fit=crop&w=700&q=80">
-
-                    <span class="discount">-28%</span>
-
-                    <button class="wishlist"
-                    onclick="event.stopPropagation();wishlist(this)">
-                        ♡
-                    </button>
-
-                </div>
-
-                <div class="product-info">
-
-                    <div class="product-name">
-                        Premium Casual Formal Shirt
-                    </div>
-
-                    <div class="rating">
-                        ★★★★★ <span>(94)</span>
-                    </div>
-
-                    <span class="price">৳850</span>
-                    <span class="old-price">৳1,180</span>
-
-                    <div class="sold">
-                        210 sold
-                    </div>
-
-                    <button class="add-cart"
-                    onclick="addToCart('Premium Casual Formal Shirt')">
-                        🛒 Add to Cart
-                    </button>
-
-                </div>
-
-            </div>
-
-
-            <!-- PRODUCT 3 -->
-            <div class="product">
-
-                <div class="product-img">
-
-                    <img src="https://images.unsplash.com/photo-1542272604-787c3835535d?auto=format&fit=crop&w=700&q=80">
-
-                    <span class="discount">-30%</span>
-
-                    <button class="wishlist"
-                    onclick="event.stopPropagation();wishlist(this)">
-                        ♡
-                    </button>
-
-                </div>
-
-                <div class="product-info">
-
-                    <div class="product-name">
-                        Classic Slim Fit Denim Jeans
-                    </div>
-
-                    <div class="rating">
-                        ★★★★☆ <span>(76)</span>
-                    </div>
-
-                    <span class="price">৳1,050</span>
-                    <span class="old-price">৳1,500</span>
-
-                    <div class="sold">
-                        178 sold
-                    </div>
-
-                    <button class="add-cart"
-                    onclick="addToCart('Classic Slim Fit Denim Jeans')">
-                        🛒 Add to Cart
-                    </button>
-
-                </div>
-
-            </div>
-
-
-            <!-- PRODUCT 4 -->
-            <div class="product">
-
-                <div class="product-img">
-
-                    <img src="https://images.unsplash.com/photo-1551028719-00167b16eac5?auto=format&fit=crop&w=700&q=80">
-
-                    <span class="discount">-40%</span>
-
-                    <button class="wishlist"
-                    onclick="event.stopPropagation();wishlist(this)">
-                        ♡
-                    </button>
-
-                </div>
-
-                <div class="product-info">
-
-                    <div class="product-name">
-                        Premium Leather Style Jacket
-                    </div>
-
-                    <div class="rating">
-                        ★★★★★ <span>(53)</span>
-                    </div>
-
-                    <span class="price">৳1,799</span>
-                    <span class="old-price">৳2,999</span>
-
-                    <div class="sold">
-                        96 sold
-                    </div>
-
-                    <button class="add-cart"
-                    onclick="addToCart('Premium Leather Style Jacket')">
-                        🛒 Add to Cart
-                    </button>
-
-                </div>
-
-            </div>
-
-
-            <!-- PRODUCT 5 -->
-            <div class="product">
-
-                <div class="product-img">
-
-                    <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=700&q=80">
-
-                    <span class="discount">-25%</span>
-
-                    <button class="wishlist"
-                    onclick="event.stopPropagation();wishlist(this)">
-                        ♡
-                    </button>
-
-                </div>
-
-                <div class="product-info">
-
-                    <div class="product-name">
-                        Premium Casual Sneakers
-                    </div>
-
-                    <div class="rating">
-                        ★★★★★ <span>(141)</span>
-                    </div>
-
-                    <span class="price">৳1,350</span>
-                    <span class="old-price">৳1,800</span>
-
-                    <div class="sold">
-                        405 sold
-                    </div>
-
-                    <button class="add-cart"
-                    onclick="addToCart('Premium Casual Sneakers')">
-                        🛒 Add to Cart
-                    </button>
-
-                </div>
-
+        <div
+            class="products"
+            id="productContainer"
+        >
+
+            <div class="loading">
+                Loading products... ⏳
             </div>
 
         </div>
@@ -1077,233 +1075,23 @@ body{
 </section>
 
 
-<!-- PROMOTIONAL BANNER -->
-
+<!-- PROMO -->
 <section class="promo">
 
     <div>
-        <h2>BIG FASHION SALE 🔥</h2>
-        <p>Up to 50% OFF on selected products</p>
 
-        <button class="hero-btn">
+        <h2>BIG FASHION SALE 🔥</h2>
+
+        <p>
+            Up to 50% OFF on selected products
+        </p>
+
+        <button
+            class="hero-btn"
+            onclick="document.getElementById('products').scrollIntoView()"
+        >
             SHOP NOW
         </button>
-    </div>
-
-</section>
-
-
-<!-- JUST FOR YOU -->
-
-<section class="section">
-
-    <div class="section-header">
-        <h2 class="section-title">Just For You</h2>
-        <span class="view-all">View All →</span>
-    </div>
-
-    <div class="products">
-
-
-        <div class="product">
-
-            <div class="product-img">
-
-                <img src="https://images.unsplash.com/photo-1562157873-818bc0726f68?auto=format&fit=crop&w=700&q=80">
-
-                <span class="discount">-20%</span>
-
-                <button class="wishlist"
-                onclick="event.stopPropagation();wishlist(this)">
-                    ♡
-                </button>
-
-            </div>
-
-            <div class="product-info">
-
-                <div class="product-name">
-                    Classic White Premium T-Shirt
-                </div>
-
-                <div class="rating">
-                    ★★★★★ <span>(87)</span>
-                </div>
-
-                <span class="price">৳720</span>
-                <span class="old-price">৳900</span>
-
-                <div class="sold">156 sold</div>
-
-                <button class="add-cart"
-                onclick="addToCart('Classic White Premium T-Shirt')">
-                    🛒 Add to Cart
-                </button>
-
-            </div>
-
-        </div>
-
-
-        <div class="product">
-
-            <div class="product-img">
-
-                <img src="https://images.unsplash.com/photo-1610652492500-ded1d7a4f0c5?auto=format&fit=crop&w=700&q=80">
-
-                <span class="discount">-18%</span>
-
-                <button class="wishlist"
-                onclick="event.stopPropagation();wishlist(this)">
-                    ♡
-                </button>
-
-            </div>
-
-            <div class="product-info">
-
-                <div class="product-name">
-                    Stylish Premium Polo Shirt
-                </div>
-
-                <div class="rating">
-                    ★★★★☆ <span>(62)</span>
-                </div>
-
-                <span class="price">৳790</span>
-                <span class="old-price">৳960</span>
-
-                <div class="sold">122 sold</div>
-
-                <button class="add-cart"
-                onclick="addToCart('Stylish Premium Polo Shirt')">
-                    🛒 Add to Cart
-                </button>
-
-            </div>
-
-        </div>
-
-
-        <div class="product">
-
-            <div class="product-img">
-
-                <img src="https://images.unsplash.com/photo-1551488831-00ddcb6c6bd3?auto=format&fit=crop&w=700&q=80">
-
-                <span class="discount">-32%</span>
-
-                <button class="wishlist"
-                onclick="event.stopPropagation();wishlist(this)">
-                    ♡
-                </button>
-
-            </div>
-
-            <div class="product-info">
-
-                <div class="product-name">
-                    Women's Fashion Collection
-                </div>
-
-                <div class="rating">
-                    ★★★★★ <span>(112)</span>
-                </div>
-
-                <span class="price">৳1,190</span>
-                <span class="old-price">৳1,750</span>
-
-                <div class="sold">230 sold</div>
-
-                <button class="add-cart"
-                onclick="addToCart('Womens Fashion Collection')">
-                    🛒 Add to Cart
-                </button>
-
-            </div>
-
-        </div>
-
-
-        <div class="product">
-
-            <div class="product-img">
-
-                <img src="https://images.unsplash.com/photo-1548036328-c9fa89d128fa?auto=format&fit=crop&w=700&q=80">
-
-                <span class="discount">-27%</span>
-
-                <button class="wishlist"
-                onclick="event.stopPropagation();wishlist(this)">
-                    ♡
-                </button>
-
-            </div>
-
-            <div class="product-info">
-
-                <div class="product-name">
-                    Premium Fashion Hand Bag
-                </div>
-
-                <div class="rating">
-                    ★★★★★ <span>(49)</span>
-                </div>
-
-                <span class="price">৳1,450</span>
-                <span class="old-price">৳1,999</span>
-
-                <div class="sold">89 sold</div>
-
-                <button class="add-cart"
-                onclick="addToCart('Premium Fashion Hand Bag')">
-                    🛒 Add to Cart
-                </button>
-
-            </div>
-
-        </div>
-
-
-        <div class="product">
-
-            <div class="product-img">
-
-                <img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=700&q=80">
-
-                <span class="discount">-35%</span>
-
-                <button class="wishlist"
-                onclick="event.stopPropagation();wishlist(this)">
-                    ♡
-                </button>
-
-            </div>
-
-            <div class="product-info">
-
-                <div class="product-name">
-                    Premium Classic Wrist Watch
-                </div>
-
-                <div class="rating">
-                    ★★★★☆ <span>(71)</span>
-                </div>
-
-                <span class="price">৳1,299</span>
-                <span class="old-price">৳1,999</span>
-
-                <div class="sold">198 sold</div>
-
-                <button class="add-cart"
-                onclick="addToCart('Premium Classic Wrist Watch')">
-                    🛒 Add to Cart
-                </button>
-
-            </div>
-
-        </div>
-
 
     </div>
 
@@ -1313,12 +1101,12 @@ body{
 
 
 <!-- FOOTER -->
-
 <footer class="footer">
 
     <div class="footer-grid">
 
         <div>
+
             <h2>Fashion Gallery</h2>
 
             <p>
@@ -1326,42 +1114,49 @@ body{
                 Discover quality products at affordable prices.
             </p>
 
-            <p>📞 Customer Care: 01773003866</p>
-            <p>📧 support@fashiongallery.com</p>
+            <p>
+                📞 Customer Care: 01773003866
+            </p>
+
+            <p>
+                📧 support@fashiongallery.com
+            </p>
+
         </div>
 
-
         <div>
+
             <h3>Customer Care</h3>
 
             <a href="#">Help Center</a>
             <a href="#">How to Buy</a>
             <a href="#">Returns & Refunds</a>
             <a href="#">Contact Us</a>
+
         </div>
 
-
         <div>
+
             <h3>About Us</h3>
 
             <a href="#">About Fashion Gallery</a>
             <a href="#">Privacy Policy</a>
             <a href="#">Terms & Conditions</a>
-            <a href="#">Seller Center</a>
+
         </div>
 
-
         <div>
+
             <h3>Follow Us</h3>
 
             <a href="#">Facebook</a>
             <a href="#">Instagram</a>
             <a href="#">TikTok</a>
             <a href="#">YouTube</a>
+
         </div>
 
     </div>
-
 
     <div class="copyright">
         © 2026 Fashion Gallery. All Rights Reserved.
@@ -1371,34 +1166,556 @@ body{
 
 
 <!-- CART MESSAGE -->
-
-<div class="cart-message" id="cartMessage">
+<div
+    class="cart-message"
+    id="cartMessage"
+>
     Product added to cart 🛒
+</div>
+
+
+<!-- ADMIN BUTTON -->
+<button
+    class="admin-button"
+    onclick="openLogin()"
+>
+    🔐 Admin
+</button>
+
+
+<!-- LOGIN MODAL -->
+<div
+    class="modal"
+    id="loginModal"
+>
+
+    <div class="modal-box login-box">
+
+        <div class="modal-header">
+
+            <h3>🔐 Admin Login</h3>
+
+            <button
+                class="modal-close"
+                onclick="closeModal('loginModal')"
+            >
+                ✕
+            </button>
+
+        </div>
+
+        <div class="login-body">
+
+            <input
+                type="email"
+                id="loginEmail"
+                placeholder="Admin Gmail"
+            >
+
+            <input
+                type="password"
+                id="loginPassword"
+                placeholder="Password"
+            >
+
+            <button
+                class="login-btn"
+                onclick="adminLogin()"
+            >
+                LOGIN
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ADMIN MODAL -->
+<div
+    class="modal"
+    id="adminModal"
+>
+
+    <div class="modal-box">
+
+        <div class="modal-header">
+
+            <h2>🛍️ Fashion Gallery Admin</h2>
+
+            <button
+                class="modal-close"
+                onclick="closeAdmin()"
+            >
+                ✕
+            </button>
+
+        </div>
+
+
+        <div class="modal-body">
+
+            <h3>Add New Product</h3>
+
+            <div class="form-grid">
+
+                <div class="form-group">
+                    <label>Product Name *</label>
+
+                    <input
+                        id="pName"
+                        placeholder="Premium T-Shirt"
+                    >
+                </div>
+
+
+                <div class="form-group">
+                    <label>Category</label>
+
+                    <input
+                        id="pCategory"
+                        placeholder="T-Shirts"
+                    >
+                </div>
+
+
+                <div class="form-group full">
+                    <label>Description</label>
+
+                    <textarea
+                        id="pDescription"
+                        placeholder="Product description..."
+                    ></textarea>
+                </div>
+
+
+                <div class="form-group">
+                    <label>Price *</label>
+
+                    <input
+                        id="pPrice"
+                        type="number"
+                        placeholder="650"
+                    >
+                </div>
+
+
+                <div class="form-group">
+                    <label>Old Price</label>
+
+                    <input
+                        id="pOldPrice"
+                        type="number"
+                        placeholder="999"
+                    >
+                </div>
+
+
+                <div class="form-group">
+                    <label>Discount %</label>
+
+                    <input
+                        id="pDiscount"
+                        type="number"
+                        placeholder="35"
+                    >
+                </div>
+
+
+                <div class="form-group">
+                    <label>Stock</label>
+
+                    <input
+                        id="pStock"
+                        type="number"
+                        placeholder="50"
+                    >
+                </div>
+
+
+                <div class="form-group">
+                    <label>Rating</label>
+
+                    <input
+                        id="pRating"
+                        type="number"
+                        min="0"
+                        max="5"
+                        step="0.1"
+                        placeholder="4.5"
+                    >
+                </div>
+
+
+                <div class="form-group">
+                    <label>Image URL</label>
+
+                    <input
+                        id="pImage"
+                        placeholder="https://..."
+                    >
+                </div>
+
+            </div>
+
+
+            <button
+                class="admin-add-btn"
+                onclick="addProduct()"
+            >
+                ➕ ADD PRODUCT
+            </button>
+
+
+            <div class="admin-list">
+
+                <h3>
+                    Products
+                </h3>
+
+                <div id="adminProductList">
+                    Loading...
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
 </div>
 
 
 <script>
 
-/* CART */
+/* =====================================
+   SUPABASE CONFIGURATION
+===================================== */
+
+const SUPABASE_URL =
+"https://xqcvylogmlqykdmzjjpy.supabase.co";
+
+const SUPABASE_KEY =
+"sb_publishable_W6xGLr22hXDyWfR7EdKbYw_O5qZ9dJh";
+
+const db =
+supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+);
+
+
+/* =====================================
+   VARIABLES
+===================================== */
+
+let allProducts = [];
 
 let cartCount = 0;
 
-function addToCart(productName){
+
+/* =====================================
+   LOAD PRODUCTS FROM SUPABASE
+===================================== */
+
+async function loadProducts(){
+
+    const container =
+        document.getElementById("productContainer");
+
+    container.innerHTML =
+        `<div class="loading">
+            Loading products... ⏳
+        </div>`;
+
+
+    const { data, error } =
+        await db
+        .from("products")
+        .select("*")
+        .order(
+            "created_at",
+            { ascending:false }
+        );
+
+
+    if(error){
+
+        console.error(error);
+
+        container.innerHTML =
+        `<div class="empty">
+            ❌ Products loading failed.
+            <br><br>
+            Please refresh the page.
+        </div>`;
+
+        return;
+    }
+
+
+    allProducts =
+        data || [];
+
+
+    displayProducts(allProducts);
+}
+
+
+/* =====================================
+   DISPLAY PRODUCTS
+===================================== */
+
+function displayProducts(products){
+
+    const container =
+        document.getElementById(
+            "productContainer"
+        );
+
+
+    if(!products.length){
+
+        container.innerHTML =
+        `<div class="empty">
+            <h3>No products found 😔</h3>
+            <p>Admin can add products.</p>
+        </div>`;
+
+        return;
+    }
+
+
+    container.innerHTML =
+    products.map(product => {
+
+        let rating =
+            Number(product.rating || 0);
+
+        let roundedRating =
+            Math.round(rating);
+
+        let stars =
+            "★".repeat(roundedRating) +
+            "☆".repeat(
+                5-roundedRating
+            );
+
+
+        return `
+
+        <div
+            class="product"
+            data-name="${escapeHTML(product.name)}"
+        >
+
+            <div class="product-img">
+
+                <img
+                    src="${escapeHTML(
+                        product.image_url ||
+                        "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=700&q=80"
+                    )}"
+                    alt="${escapeHTML(product.name)}"
+                    onerror="this.src='https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=700&q=80'"
+                >
+
+
+                ${
+                    product.discount > 0
+                    ?
+                    `<span class="discount">
+                        -${product.discount}%
+                    </span>`
+                    :
+                    ""
+                }
+
+
+                <button
+                    class="wishlist"
+                    onclick="toggleWishlist(this,event)"
+                >
+                    ♡
+                </button>
+
+            </div>
+
+
+            <div class="product-info">
+
+                <div class="product-name">
+                    ${escapeHTML(product.name)}
+                </div>
+
+
+                <div class="rating">
+
+                    ${stars}
+
+                    <span>
+                        ${product.rating || 0}/5
+                    </span>
+
+                </div>
+
+
+                <span class="price">
+                    ৳${Number(product.price).toLocaleString()}
+                </span>
+
+
+                ${
+                    product.old_price
+                    ?
+                    `<span class="old-price">
+                        ৳${Number(product.old_price).toLocaleString()}
+                    </span>`
+                    :
+                    ""
+                }
+
+
+                <div class="sold">
+                    Stock: ${product.stock || 0}
+                </div>
+
+
+                <button
+                    class="add-cart"
+                    onclick="addToCart('${escapeJS(product.name)}')"
+                >
+                    🛒 Add to Cart
+                </button>
+
+            </div>
+
+        </div>
+
+        `;
+
+    }).join("");
+}
+
+
+/* =====================================
+   SEARCH
+===================================== */
+
+function searchProducts(){
+
+    const value =
+        document
+        .getElementById("searchInput")
+        .value
+        .toLowerCase()
+        .trim();
+
+
+    if(!value){
+
+        displayProducts(allProducts);
+
+        return;
+    }
+
+
+    const filtered =
+        allProducts.filter(product => {
+
+            return (
+                String(product.name || "")
+                .toLowerCase()
+                .includes(value)
+
+                ||
+
+                String(product.category || "")
+                .toLowerCase()
+                .includes(value)
+
+                ||
+
+                String(product.description || "")
+                .toLowerCase()
+                .includes(value)
+            );
+
+        });
+
+
+    displayProducts(filtered);
+}
+
+
+/* =====================================
+   CATEGORY FILTER
+===================================== */
+
+function filterCategory(category){
+
+    event?.preventDefault();
+
+
+    const filtered =
+        allProducts.filter(product => {
+
+            const c =
+                String(product.category || "")
+                .toLowerCase();
+
+            return c.includes(
+                category.toLowerCase()
+            );
+
+        });
+
+
+    displayProducts(filtered);
+
+
+    document
+    .getElementById("products")
+    .scrollIntoView({
+        behavior:"smooth"
+    });
+}
+
+
+/* =====================================
+   CART
+===================================== */
+
+function addToCart(name){
 
     cartCount++;
 
-    document.getElementById("cartCount").innerText = cartCount;
+    document
+    .getElementById("cartCount")
+    .innerText =
+        cartCount;
 
-    let message = document.getElementById("cartMessage");
+
+    const message =
+        document.getElementById(
+            "cartMessage"
+        );
+
 
     message.innerText =
-        productName + " added to cart 🛒";
+        name +
+        " added to cart 🛒";
 
-    message.style.display = "block";
 
-    setTimeout(function(){
+    message.style.display =
+        "block";
 
-        message.style.display = "none";
+
+    setTimeout(() => {
+
+        message.style.display =
+            "none";
 
     },2000);
 }
@@ -1408,102 +1725,851 @@ function showCart(){
 
     if(cartCount === 0){
 
-        alert("Your cart is empty.");
+        alert(
+            "Your cart is empty."
+        );
 
     }else{
 
-        alert("You have " + cartCount + " product(s) in your cart.");
+        alert(
+            "You have " +
+            cartCount +
+            " product(s) in your cart."
+        );
 
     }
-
 }
 
 
-/* WISHLIST */
+/* =====================================
+   WISHLIST
+===================================== */
 
-function wishlist(button){
+function toggleWishlist(button,e){
+
+    e.stopPropagation();
+
 
     if(button.innerText === "♡"){
 
-        button.innerText = "♥";
+        button.innerText =
+            "♥";
 
     }else{
 
-        button.innerText = "♡";
+        button.innerText =
+            "♡";
 
     }
+}
+
+
+/* =====================================
+   ADMIN LOGIN
+===================================== */
+
+function openLogin(){
+
+    document
+    .getElementById("loginModal")
+    .classList.add("show");
 
 }
 
 
-/* SEARCH */
+async function adminLogin(){
 
-function searchProducts(){
-
-    let input =
-        document.getElementById("searchInput")
+    const email =
+        document
+        .getElementById("loginEmail")
         .value
-        .toLowerCase();
+        .trim();
 
-    let products =
-        document.querySelectorAll(".product");
 
-    products.forEach(function(product){
+    const password =
+        document
+        .getElementById("loginPassword")
+        .value;
 
-        let name =
-            product.querySelector(".product-name");
 
-        if(name){
+    if(!email || !password){
 
-            let text =
-                name.innerText.toLowerCase();
+        alert(
+            "Gmail এবং Password দিন।"
+        );
 
-            if(text.includes(input)){
+        return;
+    }
 
-                product.style.display = "";
 
-            }else{
+    const { data, error } =
+        await db.auth.signInWithPassword({
 
-                product.style.display = "none";
+            email:email,
+
+            password:password
+
+        });
+
+
+    if(error){
+
+        alert(
+            "Login failed!\n\n" +
+            error.message
+        );
+
+        return;
+    }
+
+
+    /* CHECK ADMIN */
+
+    const { data:isAdmin, error:adminError } =
+        await db.rpc(
+            "is_admin"
+        );
+
+
+    if(adminError){
+
+        console.error(
+            adminError
+        );
+
+        await db.auth.signOut();
+
+        alert(
+            "Admin verification failed."
+        );
+
+        return;
+    }
+
+
+    if(!isAdmin){
+
+        await db.auth.signOut();
+
+        alert(
+            "এই account Admin নয়!"
+        );
+
+        return;
+    }
+
+
+    closeModal("loginModal");
+
+
+    document
+    .getElementById("accountText")
+    .innerText =
+        "Admin";
+
+
+    alert(
+        "Admin Login Successful! ✅"
+    );
+
+
+    openAdmin();
+
+}
+
+
+/* =====================================
+   ADMIN PANEL
+===================================== */
+
+async function openAdmin(){
+
+    const {
+        data
+    } =
+        await db.auth.getSession();
+
+
+    if(!data.session){
+
+        openLogin();
+
+        return;
+    }
+
+
+    const {
+        data:isAdmin
+    } =
+        await db.rpc(
+            "is_admin"
+        );
+
+
+    if(!isAdmin){
+
+        alert(
+            "Admin access denied."
+        );
+
+        return;
+    }
+
+
+    document
+    .getElementById("adminModal")
+    .classList.add("show");
+
+
+    loadAdminProducts();
+}
+
+
+/* =====================================
+   LOAD ADMIN PRODUCTS
+===================================== */
+
+async function loadAdminProducts(){
+
+    const list =
+        document.getElementById(
+            "adminProductList"
+        );
+
+
+    list.innerHTML =
+        "Loading products...";
+
+
+    const {
+        data,
+        error
+    } =
+        await db
+        .from("products")
+        .select("*")
+        .order(
+            "created_at",
+            { ascending:false }
+        );
+
+
+    if(error){
+
+        list.innerHTML =
+            "Error loading products.";
+
+        return;
+    }
+
+
+    if(!data.length){
+
+        list.innerHTML =
+            "No products yet.";
+
+        return;
+    }
+
+
+    list.innerHTML =
+        data.map(product => `
+
+        <div class="admin-product">
+
+            <img
+                src="${escapeHTML(
+                    product.image_url || ""
+                )}"
+            >
+
+
+            <div class="admin-product-info">
+
+                <strong>
+                    ${escapeHTML(product.name)}
+                </strong>
+
+                <span>
+                    ৳${Number(product.price).toLocaleString()}
+                </span>
+
+                <small>
+                    ${escapeHTML(product.category || "No category")}
+                    |
+                    Stock: ${product.stock || 0}
+                </small>
+
+            </div>
+
+
+            <button
+                class="edit-btn"
+                onclick="editProduct(${product.id})"
+            >
+                ✏️ Edit
+            </button>
+
+
+            <button
+                class="delete-btn"
+                onclick="deleteProduct(${product.id},'${escapeJS(product.name)}')"
+            >
+                🗑️ Delete
+            </button>
+
+        </div>
+
+        `).join("");
+}
+
+
+/* =====================================
+   ADD PRODUCT
+===================================== */
+
+async function addProduct(){
+
+    const name =
+        document
+        .getElementById("pName")
+        .value
+        .trim();
+
+
+    const description =
+        document
+        .getElementById("pDescription")
+        .value
+        .trim();
+
+
+    const price =
+        Number(
+            document
+            .getElementById("pPrice")
+            .value
+        );
+
+
+    const oldPriceValue =
+        document
+        .getElementById("pOldPrice")
+        .value;
+
+
+    const old_price =
+        oldPriceValue
+        ? Number(oldPriceValue)
+        : null;
+
+
+    const discount =
+        Number(
+            document
+            .getElementById("pDiscount")
+            .value
+        ) || 0;
+
+
+    const category =
+        document
+        .getElementById("pCategory")
+        .value
+        .trim();
+
+
+    const image_url =
+        document
+        .getElementById("pImage")
+        .value
+        .trim();
+
+
+    const stock =
+        Number(
+            document
+            .getElementById("pStock")
+            .value
+        ) || 0;
+
+
+    const rating =
+        Number(
+            document
+            .getElementById("pRating")
+            .value
+        ) || 0;
+
+
+    if(!name){
+
+        alert(
+            "Product Name দিতে হবে।"
+        );
+
+        return;
+    }
+
+
+    if(!price){
+
+        alert(
+            "Product Price দিতে হবে।"
+        );
+
+        return;
+    }
+
+
+    const {
+        error
+    } =
+        await db
+        .from("products")
+        .insert({
+
+            name:name,
+
+            description:description,
+
+            price:price,
+
+            old_price:old_price,
+
+            discount:discount,
+
+            category:category,
+
+            image_url:image_url,
+
+            stock:stock,
+
+            rating:rating,
+
+            sold:0
+
+        });
+
+
+    if(error){
+
+        console.error(error);
+
+        alert(
+            "Product Add হয়নি!\n\n" +
+            error.message
+        );
+
+        return;
+    }
+
+
+    alert(
+        "Product Successfully Added! ✅"
+    );
+
+
+    clearProductForm();
+
+
+    await loadProducts();
+
+    await loadAdminProducts();
+}
+
+
+/* =====================================
+   CLEAR FORM
+===================================== */
+
+function clearProductForm(){
+
+    document
+    .getElementById("pName")
+    .value = "";
+
+    document
+    .getElementById("pDescription")
+    .value = "";
+
+    document
+    .getElementById("pPrice")
+    .value = "";
+
+    document
+    .getElementById("pOldPrice")
+    .value = "";
+
+    document
+    .getElementById("pDiscount")
+    .value = "";
+
+    document
+    .getElementById("pCategory")
+    .value = "";
+
+    document
+    .getElementById("pImage")
+    .value = "";
+
+    document
+    .getElementById("pStock")
+    .value = "";
+
+    document
+    .getElementById("pRating")
+    .value = "";
+}
+
+
+/* =====================================
+   EDIT PRODUCT
+===================================== */
+
+async function editProduct(id){
+
+    const {
+        data,
+        error
+    } =
+        await db
+        .from("products")
+        .select("*")
+        .eq("id",id)
+        .single();
+
+
+    if(error){
+
+        alert(
+            "Product পাওয়া যায়নি."
+        );
+
+        return;
+    }
+
+
+    const name =
+        prompt(
+            "Product Name:",
+            data.name
+        );
+
+
+    if(name === null)
+        return;
+
+
+    const price =
+        prompt(
+            "Price:",
+            data.price
+        );
+
+
+    if(price === null)
+        return;
+
+
+    const category =
+        prompt(
+            "Category:",
+            data.category || ""
+        );
+
+
+    if(category === null)
+        return;
+
+
+    const stock =
+        prompt(
+            "Stock:",
+            data.stock || 0
+        );
+
+
+    if(stock === null)
+        return;
+
+
+    const image =
+        prompt(
+            "Image URL:",
+            data.image_url || ""
+        );
+
+
+    if(image === null)
+        return;
+
+
+    const {
+        error:updateError
+    } =
+        await db
+        .from("products")
+        .update({
+
+            name:name.trim(),
+
+            price:Number(price),
+
+            category:category.trim(),
+
+            stock:Number(stock),
+
+            image_url:image.trim()
+
+        })
+        .eq("id",id);
+
+
+    if(updateError){
+
+        alert(
+            "Update হয়নি!\n\n" +
+            updateError.message
+        );
+
+        return;
+    }
+
+
+    alert(
+        "Product Updated! ✅"
+    );
+
+
+    await loadProducts();
+
+    await loadAdminProducts();
+}
+
+
+/* =====================================
+   DELETE PRODUCT
+===================================== */
+
+async function deleteProduct(id,name){
+
+    const confirmDelete =
+        confirm(
+            '"' +
+            name +
+            '" delete করতে চান?'
+        );
+
+
+    if(!confirmDelete)
+        return;
+
+
+    const {
+        error
+    } =
+        await db
+        .from("products")
+        .delete()
+        .eq("id",id);
+
+
+    if(error){
+
+        alert(
+            "Delete হয়নি!\n\n" +
+            error.message
+        );
+
+        return;
+    }
+
+
+    alert(
+        "Product Deleted! 🗑️"
+    );
+
+
+    await loadProducts();
+
+    await loadAdminProducts();
+}
+
+
+/* =====================================
+   CLOSE MODALS
+===================================== */
+
+function closeModal(id){
+
+    document
+    .getElementById(id)
+    .classList.remove("show");
+
+}
+
+
+function closeAdmin(){
+
+    document
+    .getElementById("adminModal")
+    .classList.remove("show");
+
+}
+
+
+/* =====================================
+   ESCAPE HTML
+===================================== */
+
+function escapeHTML(text){
+
+    if(text === null ||
+       text === undefined){
+
+        return "";
+
+    }
+
+
+    return String(text)
+
+        .replace(/&/g,"&amp;")
+
+        .replace(/</g,"&lt;")
+
+        .replace(/>/g,"&gt;")
+
+        .replace(/"/g,"&quot;")
+
+        .replace(/'/g,"&#039;");
+}
+
+
+function escapeJS(text){
+
+    if(text === null ||
+       text === undefined){
+
+        return "";
+
+    }
+
+
+    return String(text)
+
+        .replace(/\\/g,"\\\\")
+
+        .replace(/'/g,"\\'")
+
+        .replace(/\n/g," ");
+
+}
+
+
+/* =====================================
+   FLASH SALE TIMER
+===================================== */
+
+let totalSeconds =
+    8 * 60 * 60 +
+    42 * 60 +
+    35;
+
+
+setInterval(function(){
+
+    if(totalSeconds <= 0)
+        return;
+
+
+    totalSeconds--;
+
+
+    const hours =
+        Math.floor(
+            totalSeconds / 3600
+        );
+
+
+    const minutes =
+        Math.floor(
+            (totalSeconds % 3600) / 60
+        );
+
+
+    const seconds =
+        totalSeconds % 60;
+
+
+    document
+    .getElementById("hours")
+    .innerText =
+        String(hours)
+        .padStart(2,"0");
+
+
+    document
+    .getElementById("minutes")
+    .innerText =
+        String(minutes)
+        .padStart(2,"0");
+
+
+    document
+    .getElementById("seconds")
+    .innerText =
+        String(seconds)
+        .padStart(2,"0");
+
+},1000);
+
+
+/* =====================================
+   START WEBSITE
+===================================== */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function(){
+
+        loadProducts();
+
+    }
+);
+
+
+/* =====================================
+   CHECK EXISTING LOGIN
+===================================== */
+
+db.auth.onAuthStateChange(
+    async (event,session) => {
+
+        if(session){
+
+            const {
+                data:isAdmin
+            } =
+                await db.rpc(
+                    "is_admin"
+                );
+
+
+            if(isAdmin){
+
+                document
+                .getElementById("accountText")
+                .innerText =
+                    "Admin";
 
             }
 
         }
 
-    });
-
-}
-
-
-/* FLASH SALE TIMER */
-
-let totalSeconds = 8 * 60 * 60 + 42 * 60 + 35;
-
-setInterval(function(){
-
-    if(totalSeconds <= 0) return;
-
-    totalSeconds--;
-
-    let hours =
-        Math.floor(totalSeconds / 3600);
-
-    let minutes =
-        Math.floor((totalSeconds % 3600) / 60);
-
-    let seconds =
-        totalSeconds % 60;
-
-    document.getElementById("hours").innerText =
-        String(hours).padStart(2,"0");
-
-    document.getElementById("minutes").innerText =
-        String(minutes).padStart(2,"0");
-
-    document.getElementById("seconds").innerText =
-        String(seconds).padStart(2,"0");
-
-},1000);
+    }
+);
 
 </script>
 
