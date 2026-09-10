@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Shopping Cart | Fashion Gallery</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family:Arial,Helvetica,sans-serif;
+    background:#f5f5f5;
+    color:#333;
+}
+
+.header{
+    background:#f57224;
+    color:#fff;
+    padding:15px 0;
+}
+
+.header-inner{
+    width:min(1200px,94%);
+    margin:auto;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+}
+
+.logo{
+    font-size:25px;
+    font-weight:800;
+    cursor:pointer;
+}
+
+.back-btn{
+    background:#fff;
+    color:#f57224;
+    border:0;
+    padding:9px 15px;
+    border-radius:5px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.container{
+    width:min(1200px,94%);
+    margin:25px auto;
+}
+
+.title{
+    font-size:25px;
+    font-weight:700;
+    margin-bottom:20px;
+}
+
+.layout{
+    display:grid;
+    grid-template-columns:1fr 350px;
+    gap:20px;
+}
+
+.cart-box,
+.summary{
+    background:#fff;
+    border-radius:8px;
+    padding:20px;
+}
+
+.cart-item{
+    display:grid;
+    grid-template-columns:100px 1fr auto;
+    gap:15px;
+    align-items:center;
+    padding:15px 0;
+    border-bottom:1px solid #eee;
+}
+
+.cart-item:first-child{
+    padding-top:0;
+}
+
+.cart-image{
+    width:100px;
+    height:100px;
+    object-fit:cover;
+    border-radius:6px;
+    background:#eee;
+}
+
+.item-name{
+    font-size:17px;
+    font-weight:700;
+    margin-bottom:7px;
+}
+
+.item-info{
+    font-size:13px;
+    color:#777;
+    margin-bottom:5px;
+}
+
+.item-price{
+    color:#f57224;
+    font-size:17px;
+    font-weight:700;
+}
+
+.qty-box{
+    display:flex;
+    align-items:center;
+    margin-top:12px;
+}
+
+.qty-btn{
+    width:32px;
+    height:32px;
+    border:1px solid #ddd;
+    background:#fff;
+    cursor:pointer;
+    font-size:18px;
+}
+
+.qty-number{
+    width:40px;
+    height:32px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border-top:1px solid #ddd;
+    border-bottom:1px solid #ddd;
+}
+
+.remove-btn{
+    border:0;
+    background:#fff;
+    color:#ef4444;
+    font-size:13px;
+    cursor:pointer;
+    margin-top:8px;
+}
+
+.item-total{
+    font-size:17px;
+    font-weight:bold;
+    text-align:right;
+}
+
+.empty{
+    text-align:center;
+    padding:60px 20px;
+    color:#777;
+}
+
+.empty-icon{
+    font-size:55px;
+    margin-bottom:15px;
+}
+
+.shop-btn{
+    display:inline-block;
+    margin-top:20px;
+    background:#f57224;
+    color:#fff;
+    padding:12px 25px;
+    border-radius:5px;
+    text-decoration:none;
+    font-weight:bold;
+}
+
+.summary h2{
+    font-size:20px;
+    margin-bottom:20px;
+}
+
+.summary-row{
+    display:flex;
+    justify-content:space-between;
+    margin-bottom:15px;
+    font-size:14px;
+}
+
+.summary-row.total{
+    border-top:1px solid #eee;
+    padding-top:18px;
+    font-size:20px;
+    font-weight:bold;
+}
+
+.checkout-btn{
+    width:100%;
+    margin-top:15px;
+    padding:14px;
+    border:0;
+    background:#f57224;
+    color:#fff;
+    border-radius:5px;
+    font-size:16px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.checkout-btn:hover{
+    background:#e85f16;
+}
+
+.delivery-note{
+    background:#fff7f2;
+    color:#a44b1b;
+    padding:12px;
+    border-radius:5px;
+    font-size:12px;
+    margin-top:15px;
+}
+
+@media(max-width:800px){
+
+    .layout{
+        grid-template-columns:1fr;
+    }
+
+    .summary{
+        order:-1;
+    }
+
+}
+
+@media(max-width:550px){
+
+    .cart-item{
+        grid-template-columns:75px 1fr;
+    }
+
+    .cart-image{
+        width:75px;
+        height:75px;
+    }
+
+    .item-total{
+        grid-column:2;
+        text-align:left;
+    }
+
+    .item-name{
+        font-size:15px;
+    }
+
+}
+</style>
+</head>
+
+<body>
+
+<header class="header">
+
+    <div class="header-inner">
+
+        <div
+            class="logo"
+            onclick="location.href='index.html'"
+        >
+            Fashion Gallery
+        </div>
+
+        <button
+            class="back-btn"
+            onclick="location.href='index.html'"
+        >
+            ← Continue Shopping
+        </button>
+
+    </div>
+
+</header>
+
+
+<div class="container">
+
+    <div class="title">
+        Shopping Cart 🛒
+    </div>
+
+
+    <div class="layout">
+
+        <div class="cart-box">
+
+            <div id="cartItems"></div>
+
+        </div>
+
+
+        <div class="summary">
+
+            <h2>
+                Order Summary
+            </h2>
+
+            <div class="summary-row">
+
+                <span>
+                    Subtotal
+                </span>
+
+                <strong>
+                    ৳<span id="subtotal">0</span>
+                </strong>
+
+            </div>
+
+
+            <div class="summary-row">
+
+                <span>
+                    Delivery
+                </span>
+
+                <strong>
+                    ৳<span id="delivery">60</span>
+                </strong>
+
+            </div>
+
+
+            <div class="summary-row total">
+
+                <span>
+                    Total
+                </span>
+
+                <span>
+                    ৳<span id="total">60</span>
+                </span>
+
+            </div>
+
+
+            <button
+                class="checkout-btn"
+                onclick="goCheckout()"
+            >
+                Proceed to Checkout
+            </button>
+
+
+            <div class="delivery-note">
+
+                🚚 Delivery charge is currently
+                <strong>৳60</strong>.
+                Final delivery charge can be changed later
+                from the admin system.
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+const DELIVERY_CHARGE = 60;
+
+
+/* =========================
+   GET CART
+========================= */
+
+function getCart(){
+
+    try{
+
+        return JSON.parse(
+            localStorage.getItem("cart")
+        ) || [];
+
+    }catch(e){
+
+        return [];
+
+    }
+
+}
+
+
+/* =========================
+   SAVE CART
+========================= */
+
+function saveCart(cart){
+
+    localStorage.setItem(
+        "cart",
+        JSON.stringify(cart)
+    );
+
+}
+
+
+/* =========================
+   RENDER CART
+========================= */
+
+function renderCart(){
+
+    const cart =
+        getCart();
+
+    const container =
+        document.getElementById(
+            "cartItems"
+        );
+
+    if(cart.length === 0){
+
+        container.innerHTML = `
+
+            <div class="empty">
+
+                <div class="empty-icon">
+                    🛒
+                </div>
+
+                <h2>
+                    Your cart is empty
+                </h2>
+
+                <p style="margin-top:8px;">
+                    Add some products to your cart.
+                </p>
+
+                <a
+                    href="index.html"
+                    class="shop-btn"
+                >
+                    Start Shopping
+                </a>
+
+            </div>
+
+        `;
+
+        document.getElementById(
+            "subtotal"
+        ).textContent = "0";
+
+        document.getElementById(
+            "delivery"
+        ).textContent = "0";
+
+        document.getElementById(
+            "total"
+        ).textContent = "0";
+
+        return;
+
+    }
+
+
+    let subtotal = 0;
+
+
+    container.innerHTML =
+        cart.map((item,index)=>{
+
+            const price =
+                Number(item.price || 0);
+
+            const quantity =
+                Number(item.quantity || 1);
+
+            const itemTotal =
+                price * quantity;
+
+            subtotal += itemTotal;
+
+
+            return `
+
+                <div class="cart-item">
+
+                    <img
+                        class="cart-image"
+                        src="${escapeHtml(
+                            item.image_url || ""
+                        )}"
+                        onerror="
+                            this.src='https://placehold.co/100x100?text=Product'
+                        "
+                    >
+
+
+                    <div>
+
+                        <div class="item-name">
+
+                            ${escapeHtml(
+                                item.name || "Product"
+                            )}
+
+                        </div>
+
+
+                        ${
+                            item.size
+                            ? `
+                            <div class="item-info">
+                                Size: ${escapeHtml(item.size)}
+                            </div>
+                            `
+                            : ""
+                        }
+
+
+                        ${
+                            item.color
+                            ? `
+                            <div class="item-info">
+                                Color: ${escapeHtml(item.color)}
+                            </div>
+                            `
+                            : ""
+                        }
+
+
+                        <div class="item-price">
+
+                            ৳${price.toLocaleString()}
+
+                        </div>
+
+
+                        <div class="qty-box">
+
+                            <button
+                                class="qty-btn"
+                                onclick="changeQty(${index},-1)"
+                            >
+                                −
+                            </button>
+
+                            <div class="qty-number">
+                                ${quantity}
+                            </div>
+
+                            <button
+                                class="qty-btn"
+                                onclick="changeQty(${index},1)"
+                            >
+                                +
+                            </button>
+
+                        </div>
+
+
+                        <button
+                            class="remove-btn"
+                            onclick="removeItem(${index})"
+                        >
+                            🗑 Remove
+                        </button>
+
+                    </div>
+
+
+                    <div class="item-total">
+
+                        ৳${itemTotal.toLocaleString()}
+
+                    </div>
+
+                </div>
+
+            `;
+
+        })
+        .join("");
+
+
+    document.getElementById(
+        "subtotal"
+    ).textContent =
+        subtotal.toLocaleString();
+
+
+    document.getElementById(
+        "delivery"
+    ).textContent =
+        DELIVERY_CHARGE.toLocaleString();
+
+
+    document.getElementById(
+        "total"
+    ).textContent =
+        (
+            subtotal +
+            DELIVERY_CHARGE
+        ).toLocaleString();
+
+}
+
+
+/* =========================
+   CHANGE QUANTITY
+========================= */
+
+function changeQty(index,change){
+
+    const cart =
+        getCart();
+
+    if(!cart[index]){
+        return;
+    }
+
+    const current =
+        Number(cart[index].quantity || 1);
+
+    const newQty =
+        current + change;
+
+    if(newQty <= 0){
+
+        cart.splice(index,1);
+
+    }else{
+
+        cart[index].quantity =
+            newQty;
+
+    }
+
+    saveCart(cart);
+
+    renderCart();
+
+}
+
+
+/* =========================
+   REMOVE
+========================= */
+
+function removeItem(index){
+
+    const cart =
+        getCart();
+
+    if(!cart[index]){
+        return;
+    }
+
+    cart.splice(index,1);
+
+    saveCart(cart);
+
+    renderCart();
+
+}
+
+
+/* =========================
+   CHECKOUT
+========================= */
+
+function goCheckout(){
+
+    const cart =
+        getCart();
+
+    if(cart.length === 0){
+
+        alert(
+            "Your cart is empty."
+        );
+
+        return;
+
+    }
+
+    location.href =
+        "checkout.html";
+
+}
+
+
+/* =========================
+   ESCAPE HTML
+========================= */
+
+function escapeHtml(value){
+
+    return String(value)
+        .replace(/&/g,"&amp;")
+        .replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;")
+        .replace(/"/g,"&quot;")
+        .replace(/'/g,"&#039;");
+
+}
+
+
+/* =========================
+   START
+========================= */
+
+renderCart();
+
+</script>
+
+</body>
+</html>
