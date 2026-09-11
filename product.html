@@ -14,12 +14,14 @@
 
 :root{
     --orange:#f57224;
+    --orange-dark:#d95d12;
     --dark:#111827;
     --text:#374151;
     --muted:#6b7280;
     --border:#e5e7eb;
     --bg:#f5f5f5;
     --green:#16a34a;
+    --white:#fff;
 }
 
 body{
@@ -32,6 +34,10 @@ button,input{
     font-family:inherit;
 }
 
+button{
+    -webkit-tap-highlight-color:transparent;
+}
+
 a{
     text-decoration:none;
     color:inherit;
@@ -42,10 +48,12 @@ a{
     margin:auto;
 }
 
-/* TOP */
+/* =========================
+   TOP BAR
+========================= */
 
 .topbar{
-    background:#111827;
+    background:var(--dark);
     color:#fff;
     font-size:13px;
 }
@@ -62,14 +70,16 @@ a{
     gap:20px;
 }
 
-/* HEADER */
+/* =========================
+   HEADER
+========================= */
 
 .header{
     background:#fff;
     box-shadow:0 2px 10px rgba(0,0,0,.07);
     position:sticky;
     top:0;
-    z-index:100;
+    z-index:1000;
 }
 
 .header-main{
@@ -104,6 +114,11 @@ a{
     border-radius:6px 0 0 6px;
     padding:0 15px;
     outline:none;
+    font-size:14px;
+}
+
+.search input:focus{
+    border-color:var(--orange);
 }
 
 .search button{
@@ -123,24 +138,28 @@ a{
     background:none;
     font-size:23px;
     cursor:pointer;
+    padding:8px;
 }
 
 .cart-badge{
     position:absolute;
-    right:-5px;
-    top:-7px;
+    right:-2px;
+    top:0;
     background:var(--orange);
     color:#fff;
-    width:18px;
-    height:18px;
+    width:19px;
+    height:19px;
     border-radius:50%;
     display:flex;
     align-items:center;
     justify-content:center;
     font-size:10px;
+    font-weight:bold;
 }
 
-/* NAV */
+/* =========================
+   NAV
+========================= */
 
 .nav{
     background:#fff;
@@ -165,7 +184,9 @@ a{
     color:var(--orange);
 }
 
-/* BREADCRUMB */
+/* =========================
+   BREADCRUMB
+========================= */
 
 .breadcrumb{
     padding:18px 0;
@@ -177,7 +198,9 @@ a{
     color:var(--orange);
 }
 
-/* PRODUCT */
+/* =========================
+   PRODUCT
+========================= */
 
 .product-box{
     background:#fff;
@@ -188,7 +211,9 @@ a{
     gap:40px;
 }
 
-/* GALLERY */
+/* =========================
+   GALLERY
+========================= */
 
 .gallery{
     display:grid;
@@ -236,7 +261,9 @@ a{
     object-fit:contain;
 }
 
-/* DETAILS */
+/* =========================
+   DETAILS
+========================= */
 
 .details{
     padding:5px 0;
@@ -325,6 +352,10 @@ a{
     background:#fff7f2;
 }
 
+/* =========================
+   QUANTITY
+========================= */
+
 .quantity{
     display:flex;
     align-items:center;
@@ -338,6 +369,10 @@ a{
     background:#f9fafb;
     cursor:pointer;
     font-size:18px;
+}
+
+.qty-btn:hover{
+    background:#eee;
 }
 
 .qty-value{
@@ -357,6 +392,10 @@ a{
     color:var(--green);
 }
 
+/* =========================
+   BUTTONS
+========================= */
+
 .buttons{
     display:flex;
     gap:10px;
@@ -370,6 +409,7 @@ a{
     cursor:pointer;
     font-weight:700;
     font-size:14px;
+    transition:.2s;
 }
 
 .cart-btn{
@@ -389,10 +429,17 @@ a{
 }
 
 .buy-btn:hover{
-    background:#d95d12;
+    background:var(--orange-dark);
 }
 
-/* SERVICE */
+.btn:disabled{
+    opacity:.5;
+    cursor:not-allowed;
+}
+
+/* =========================
+   SERVICES
+========================= */
 
 .services{
     margin-top:15px;
@@ -425,7 +472,9 @@ a{
     color:var(--muted);
 }
 
-/* DESCRIPTION */
+/* =========================
+   DESCRIPTION
+========================= */
 
 .description{
     margin-top:15px;
@@ -436,7 +485,7 @@ a{
 
 .description h2{
     font-size:20px;
-    color:#111827;
+    color:var(--dark);
     margin-bottom:18px;
 }
 
@@ -447,7 +496,9 @@ a{
     white-space:pre-line;
 }
 
-/* RELATED */
+/* =========================
+   RELATED
+========================= */
 
 .related{
     margin-top:20px;
@@ -472,6 +523,12 @@ a{
     border-radius:6px;
     overflow:hidden;
     cursor:pointer;
+    transition:.2s;
+}
+
+.related-card:hover{
+    transform:translateY(-3px);
+    box-shadow:0 5px 15px rgba(0,0,0,.08);
 }
 
 .related-card img{
@@ -496,7 +553,9 @@ a{
     margin-top:6px;
 }
 
-/* LOADING */
+/* =========================
+   LOADING / ERROR
+========================= */
 
 .loading{
     text-align:center;
@@ -511,11 +570,13 @@ a{
     border-radius:8px;
 }
 
-/* FOOTER */
+/* =========================
+   FOOTER
+========================= */
 
 footer{
     margin-top:35px;
-    background:#111827;
+    background:var(--dark);
     color:#fff;
 }
 
@@ -554,7 +615,9 @@ footer{
     font-size:12px;
 }
 
-/* MOBILE */
+/* =========================
+   MOBILE
+========================= */
 
 @media(max-width:900px){
 
@@ -644,16 +707,23 @@ footer{
 
 <body>
 
+<!-- TOP BAR -->
+
 <div class="topbar">
     <div class="container topbar-inner">
+
         <span>Welcome to Fashion Gallery</span>
 
         <div class="top-links">
             <span>Save More on App</span>
             <span>Customer Care</span>
         </div>
+
     </div>
 </div>
+
+
+<!-- HEADER -->
 
 <header class="header">
 
@@ -664,6 +734,7 @@ footer{
         </a>
 
         <div class="search">
+
             <input
                 id="searchInput"
                 type="text"
@@ -671,43 +742,60 @@ footer{
             >
 
             <button onclick="doSearch()">⌕</button>
+
         </div>
 
         <button
             class="header-cart"
             onclick="goCart()"
+            aria-label="Cart"
         >
+
             🛒
+
             <span
                 class="cart-badge"
                 id="cartCount"
             >0</span>
+
         </button>
 
     </div>
 
+
     <nav class="nav">
+
         <div class="container nav-inner">
+
             <a href="index.html">All Products</a>
-            <a href="index.html">Men</a>
-            <a href="index.html">Women</a>
-            <a href="index.html">T-Shirt</a>
-            <a href="index.html">Shirt</a>
-            <a href="index.html">Pants</a>
-            <a href="index.html">Fashion</a>
+            <a href="index.html?category=Men">Men</a>
+            <a href="index.html?category=Women">Women</a>
+            <a href="index.html?category=T-Shirt">T-Shirt</a>
+            <a href="index.html?category=Shirt">Shirt</a>
+            <a href="index.html?category=Pants">Pants</a>
+            <a href="index.html?category=Fashion">Fashion</a>
+
         </div>
+
     </nav>
 
 </header>
 
 
+<!-- MAIN -->
+
 <main class="container">
 
     <div class="breadcrumb">
+
         <a href="index.html">Home</a>
+
         &nbsp; / &nbsp;
+
         Product Details
+
     </div>
+
 
     <div id="productArea">
 
@@ -720,61 +808,83 @@ footer{
 </main>
 
 
+<!-- FOOTER -->
+
 <footer>
 
-<div class="container footer-main">
+    <div class="container footer-main">
 
-    <div>
-        <div class="footer-logo">
-            Fashion Gallery
+        <div>
+
+            <div class="footer-logo">
+                Fashion Gallery
+            </div>
+
+            <p style="color:#9ca3af;font-size:13px;line-height:1.7;">
+                Your destination for stylish, quality
+                and affordable fashion.
+            </p>
+
         </div>
 
-        <p style="color:#9ca3af;font-size:13px;line-height:1.7;">
-            Your destination for stylish, quality
-            and affordable fashion.
-        </p>
+
+        <div class="footer-col">
+
+            <h3>Customer Service</h3>
+
+            <ul>
+                <li>Help Center</li>
+                <li>Contact Us</li>
+                <li>Delivery Information</li>
+                <li>Return Policy</li>
+            </ul>
+
+        </div>
+
+
+        <div class="footer-col">
+
+            <h3>About</h3>
+
+            <ul>
+                <li>About Fashion Gallery</li>
+                <li>Privacy Policy</li>
+                <li>Terms & Conditions</li>
+            </ul>
+
+        </div>
+
+
+        <div class="footer-col">
+
+            <h3>Follow Us</h3>
+
+            <ul>
+                <li>Facebook</li>
+                <li>Instagram</li>
+                <li>TikTok</li>
+            </ul>
+
+        </div>
+
     </div>
 
-    <div class="footer-col">
-        <h3>Customer Service</h3>
-        <ul>
-            <li>Help Center</li>
-            <li>Contact Us</li>
-            <li>Delivery Information</li>
-            <li>Return Policy</li>
-        </ul>
+
+    <div class="footer-bottom">
+        © 2026 Fashion Gallery. All rights reserved.
     </div>
-
-    <div class="footer-col">
-        <h3>About</h3>
-        <ul>
-            <li>About Fashion Gallery</li>
-            <li>Privacy Policy</li>
-            <li>Terms & Conditions</li>
-        </ul>
-    </div>
-
-    <div class="footer-col">
-        <h3>Follow Us</h3>
-        <ul>
-            <li>Facebook</li>
-            <li>Instagram</li>
-            <li>TikTok</li>
-        </ul>
-    </div>
-
-</div>
-
-<div class="footer-bottom">
-    © 2026 Fashion Gallery. All rights reserved.
-</div>
 
 </footer>
 
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
+
 <script>
+
+/* =========================
+   SUPABASE
+========================= */
 
 const SUPABASE_URL =
 "https://xqcvylogmlqykdmzjjpy.supabase.co";
@@ -801,20 +911,27 @@ supabase.createClient(
 ========================= */
 
 let product = null;
+
 let quantity = 1;
+
 let selectedSize = "";
+
 let selectedColor = "";
 
 let cart =
-JSON.parse(localStorage.getItem("fg_cart") || "[]");
+JSON.parse(
+    localStorage.getItem("fg_cart") || "[]"
+);
 
 
 /* =========================
-   GET PRODUCT ID
+   PRODUCT ID
 ========================= */
 
 const params =
-new URLSearchParams(window.location.search);
+new URLSearchParams(
+    window.location.search
+);
 
 const productId =
 params.get("id");
@@ -833,6 +950,7 @@ async function loadProduct(){
         return;
     }
 
+
     const {data,error} =
         await supabaseClient
         .from("products")
@@ -840,25 +958,34 @@ async function loadProduct(){
         .eq("id",productId)
         .single();
 
+
     if(error || !data){
 
         console.error(error);
 
-        showError("This product could not be found.");
+        showError(
+            "This product could not be found."
+        );
 
         return;
     }
 
+
     product = data;
+
 
     document.title =
         `${product.name} | Fashion Gallery`;
 
+
     renderProduct();
+
 
     loadRelatedProducts();
 
+
     updateCartCount();
+
 }
 
 
@@ -872,24 +999,35 @@ function renderProduct(){
         product.image_url ||
         "https://placehold.co/800x800?text=Fashion+Gallery";
 
+
     const price =
         Number(product.price || 0);
+
 
     const oldPrice =
         Number(product.old_price || 0);
 
+
     const discount =
         Number(product.discount || 0);
+
 
     const rating =
         Number(product.rating || 0);
 
+
     const stock =
         Number(product.stock || 0);
 
-    document.getElementById("productArea").innerHTML = `
+
+    document.getElementById(
+        "productArea"
+    ).innerHTML = `
 
         <section class="product-box">
+
+
+            <!-- GALLERY -->
 
             <div class="gallery">
 
@@ -897,12 +1035,21 @@ function renderProduct(){
 
                     <div
                         class="thumb active"
-                        onclick="changeImage('${escapeHtml(image)}',this)"
+                        onclick="changeImage(
+                            '${escapeHtml(image)}',
+                            this
+                        )"
                     >
-                        <img src="${escapeHtml(image)}">
+
+                        <img
+                            src="${escapeHtml(image)}"
+                            alt="Product"
+                        >
+
                     </div>
 
                 </div>
+
 
                 <div class="main-image">
 
@@ -917,11 +1064,15 @@ function renderProduct(){
             </div>
 
 
+            <!-- DETAILS -->
+
             <div class="details">
+
 
                 <h1>
                     ${escapeHtml(product.name)}
                 </h1>
+
 
                 <div class="rating-line">
 
@@ -948,22 +1099,28 @@ function renderProduct(){
                         ৳${price.toLocaleString()}
                     </span>
 
+
                     ${
                         oldPrice > price
                         ?
-                        `<span class="old-price">
+                        `
+                        <span class="old-price">
                             ৳${oldPrice.toLocaleString()}
-                        </span>`
+                        </span>
+                        `
                         :
                         ""
                     }
 
+
                     ${
                         discount > 0
                         ?
-                        `<span class="discount">
+                        `
+                        <span class="discount">
                             -${discount}%
-                        </span>`
+                        </span>
+                        `
                         :
                         ""
                     }
@@ -974,116 +1131,167 @@ function renderProduct(){
                 ${
                     product.description
                     ?
-                    `<div class="divider"></div>
-                     <p style="font-size:14px;line-height:1.7;color:#666;">
+                    `
+                    <div class="divider"></div>
+
+                    <p style="
+                        font-size:14px;
+                        line-height:1.7;
+                        color:#666;
+                    ">
                         ${escapeHtml(
-                            String(product.description)
-                            .substring(0,250)
+                            String(
+                                product.description
+                            ).substring(0,250)
                         )}
-                     </p>`
+                    </p>
+                    `
                     :
                     ""
                 }
 
 
+                <!-- SIZE -->
+
                 <div class="option-title">
                     Size
                 </div>
+
 
                 <div class="options">
 
                     <button
                         class="option"
                         onclick="selectSize(this,'S')"
-                    >S</button>
+                    >
+                        S
+                    </button>
 
                     <button
                         class="option"
                         onclick="selectSize(this,'M')"
-                    >M</button>
+                    >
+                        M
+                    </button>
 
                     <button
                         class="option"
                         onclick="selectSize(this,'L')"
-                    >L</button>
+                    >
+                        L
+                    </button>
 
                     <button
                         class="option"
                         onclick="selectSize(this,'XL')"
-                    >XL</button>
+                    >
+                        XL
+                    </button>
 
                     <button
                         class="option"
                         onclick="selectSize(this,'XXL')"
-                    >XXL</button>
+                    >
+                        XXL
+                    </button>
 
                 </div>
 
+
+                <!-- COLOR -->
 
                 <div class="option-title">
                     Color
                 </div>
+
 
                 <div class="options">
 
                     <button
                         class="option"
                         onclick="selectColor(this,'Black')"
-                    >Black</button>
+                    >
+                        Black
+                    </button>
 
                     <button
                         class="option"
                         onclick="selectColor(this,'White')"
-                    >White</button>
+                    >
+                        White
+                    </button>
 
                     <button
                         class="option"
                         onclick="selectColor(this,'Blue')"
-                    >Blue</button>
+                    >
+                        Blue
+                    </button>
 
                     <button
                         class="option"
                         onclick="selectColor(this,'Red')"
-                    >Red</button>
+                    >
+                        Red
+                    </button>
 
                 </div>
 
+
+                <!-- QUANTITY -->
 
                 <div class="option-title">
                     Quantity
                 </div>
+
 
                 <div class="quantity">
 
                     <button
                         class="qty-btn"
                         onclick="changeQuantity(-1)"
-                    >−</button>
+                    >
+                        −
+                    </button>
+
 
                     <div
                         class="qty-value"
                         id="quantityValue"
-                    >1</div>
+                    >
+                        1
+                    </div>
+
 
                     <button
                         class="qty-btn"
                         onclick="changeQuantity(1)"
-                    >+</button>
+                    >
+                        +
+                    </button>
+
 
                     <span class="stock">
+
                         ${
                             stock > 0
-                            ? `${stock} available`
-                            : "Out of stock"
+                            ?
+                            `${stock} available`
+                            :
+                            "Out of stock"
                         }
+
                     </span>
 
                 </div>
 
 
+                <!-- ACTION BUTTONS -->
+
                 <div class="buttons">
 
                     <button
+                        id="addCartButton"
                         class="btn cart-btn"
                         onclick="addToCart()"
                         ${stock <= 0 ? "disabled" : ""}
@@ -1091,7 +1299,9 @@ function renderProduct(){
                         🛒 Add to Cart
                     </button>
 
+
                     <button
+                        id="buyNowButton"
                         class="btn buy-btn"
                         onclick="buyNow()"
                         ${stock <= 0 ? "disabled" : ""}
@@ -1101,39 +1311,76 @@ function renderProduct(){
 
                 </div>
 
+
             </div>
 
         </section>
 
+
+        <!-- SERVICES -->
 
         <section class="services">
 
             <div class="service">
-                <div class="service-icon">🚚</div>
-                <div>
-                    <strong>Fast Delivery</strong>
-                    <span>Fast delivery service</span>
+
+                <div class="service-icon">
+                    🚚
                 </div>
+
+                <div>
+                    <strong>
+                        Fast Delivery
+                    </strong>
+
+                    <span>
+                        Fast delivery service
+                    </span>
+                </div>
+
             </div>
 
-            <div class="service">
-                <div class="service-icon">🔒</div>
-                <div>
-                    <strong>Secure Shopping</strong>
-                    <span>Safe shopping experience</span>
-                </div>
-            </div>
 
             <div class="service">
-                <div class="service-icon">↩️</div>
-                <div>
-                    <strong>Easy Return</strong>
-                    <span>Easy return support</span>
+
+                <div class="service-icon">
+                    🔒
                 </div>
+
+                <div>
+                    <strong>
+                        Secure Shopping
+                    </strong>
+
+                    <span>
+                        Safe shopping experience
+                    </span>
+                </div>
+
+            </div>
+
+
+            <div class="service">
+
+                <div class="service-icon">
+                    ↩️
+                </div>
+
+                <div>
+                    <strong>
+                        Easy Return
+                    </strong>
+
+                    <span>
+                        Easy return support
+                    </span>
+                </div>
+
             </div>
 
         </section>
 
+
+        <!-- DESCRIPTION -->
 
         <section class="description">
 
@@ -1142,6 +1389,7 @@ function renderProduct(){
             </h2>
 
             <div class="description-text">
+
                 ${
                     product.description
                     ?
@@ -1149,10 +1397,13 @@ function renderProduct(){
                     :
                     "No detailed description available for this product."
                 }
+
             </div>
 
         </section>
 
+
+        <!-- RELATED -->
 
         <section class="related">
 
@@ -1175,7 +1426,7 @@ function renderProduct(){
 
 
 /* =========================
-   IMAGE
+   CHANGE IMAGE
 ========================= */
 
 function changeImage(url,element){
@@ -1184,9 +1435,13 @@ function changeImage(url,element){
         "mainProductImage"
     ).src = url;
 
+
     document
         .querySelectorAll(".thumb")
-        .forEach(x=>x.classList.remove("active"));
+        .forEach(x =>
+            x.classList.remove("active")
+        );
+
 
     element.classList.add("active");
 
@@ -1199,18 +1454,27 @@ function changeImage(url,element){
 
 function changeQuantity(amount){
 
+    if(!product){
+        return;
+    }
+
+
     const stock =
         Number(product.stock || 0);
 
+
     quantity += amount;
+
 
     if(quantity < 1){
         quantity = 1;
     }
 
+
     if(stock > 0 && quantity > stock){
         quantity = stock;
     }
+
 
     document.getElementById(
         "quantityValue"
@@ -1227,16 +1491,26 @@ function selectSize(button,size){
 
     selectedSize = size;
 
+
     document
         .querySelectorAll(".option")
         .forEach(x=>{
+
             if(
                 ["S","M","L","XL","XXL"]
-                .includes(x.textContent.trim())
+                .includes(
+                    x.textContent.trim()
+                )
             ){
-                x.classList.remove("selected");
+
+                x.classList.remove(
+                    "selected"
+                );
+
             }
+
         });
+
 
     button.classList.add("selected");
 
@@ -1251,20 +1525,29 @@ function selectColor(button,color){
 
     selectedColor = color;
 
+
     const colors =
         ["Black","White","Blue","Red"];
+
 
     document
         .querySelectorAll(".option")
         .forEach(x=>{
+
             if(
                 colors.includes(
                     x.textContent.trim()
                 )
             ){
-                x.classList.remove("selected");
+
+                x.classList.remove(
+                    "selected"
+                );
+
             }
+
         });
+
 
     button.classList.add("selected");
 
@@ -1272,22 +1555,71 @@ function selectColor(button,color){
 
 
 /* =========================
-   ADD CART
+   ADD TO CART
 ========================= */
 
 function addToCart(){
 
     if(!product){
-        return;
+
+        return false;
+
     }
 
+
+    const stock =
+        Number(product.stock || 0);
+
+
+    if(stock <= 0){
+
+        alert("Sorry, this product is out of stock.");
+
+        return false;
+
+    }
+
+
+    /*
+       Size/Color বাধ্যতামূলক
+    */
+
+    if(!selectedSize){
+
+        alert("Please select a size first.");
+
+        return false;
+
+    }
+
+
+    if(!selectedColor){
+
+        alert("Please select a color first.");
+
+        return false;
+
+    }
+
+
     const existing =
-        cart.find(
-            x =>
-            Number(x.id) === Number(product.id) &&
-            x.size === selectedSize &&
-            x.color === selectedColor
+        cart.find(item =>
+
+            Number(item.id) ===
+            Number(product.id)
+
+            &&
+
+            item.size ===
+            selectedSize
+
+            &&
+
+            item.color ===
+            selectedColor
+
         );
+
 
     if(existing){
 
@@ -1309,14 +1641,14 @@ function addToCart(){
 
     }
 
-    localStorage.setItem(
-        "fg_cart",
-        JSON.stringify(cart)
-    );
+
+    saveCart();
+
 
     updateCartCount();
 
-    alert("Product added to cart successfully! 🛒");
+
+    return true;
 
 }
 
@@ -1327,21 +1659,44 @@ function addToCart(){
 
 function buyNow(){
 
-    addToCart();
+    const added =
+        addToCart();
 
-    setTimeout(()=>{
 
-        alert(
-            "Checkout system will be connected next."
-        );
+    if(!added){
 
-    },100);
+        return;
+
+    }
+
+
+    /*
+       Product add হওয়ার পর
+       সরাসরি cart page
+    */
+
+    window.location.href =
+        "cart.html";
 
 }
 
 
 /* =========================
-   RELATED
+   SAVE CART
+========================= */
+
+function saveCart(){
+
+    localStorage.setItem(
+        "fg_cart",
+        JSON.stringify(cart)
+    );
+
+}
+
+
+/* =========================
+   RELATED PRODUCTS
 ========================= */
 
 async function loadRelatedProducts(){
@@ -1353,10 +1708,17 @@ async function loadRelatedProducts(){
         .neq("id",product.id)
         .limit(5);
 
+
     const box =
         document.getElementById(
             "relatedProducts"
         );
+
+
+    if(!box){
+        return;
+    }
+
 
     if(error || !data || !data.length){
 
@@ -1364,7 +1726,9 @@ async function loadRelatedProducts(){
             "No related products.";
 
         return;
+
     }
+
 
     box.innerHTML =
         data.map(p=>{
@@ -1372,6 +1736,7 @@ async function loadRelatedProducts(){
             const image =
                 p.image_url ||
                 "https://placehold.co/500x500?text=Product";
+
 
             return `
 
@@ -1383,7 +1748,9 @@ async function loadRelatedProducts(){
                     <img
                         src="${escapeHtml(image)}"
                         alt="${escapeHtml(p.name)}"
+                        loading="lazy"
                     >
+
 
                     <div class="related-info">
 
@@ -1391,8 +1758,11 @@ async function loadRelatedProducts(){
                             ${escapeHtml(p.name)}
                         </div>
 
+
                         <div class="related-price">
-                            ৳${Number(p.price || 0).toLocaleString()}
+                            ৳${Number(
+                                p.price || 0
+                            ).toLocaleString()}
                         </div>
 
                     </div>
@@ -1426,14 +1796,48 @@ function updateCartCount(){
 
     const count =
         cart.reduce(
-            (sum,item)=>
-            sum + Number(item.quantity || 0),
+
+            (sum,item) =>
+
+                sum +
+                Number(
+                    item.quantity || 0
+                ),
+
             0
+
         );
 
-    document.getElementById(
-        "cartCount"
-    ).textContent = count;
+
+    const badge =
+        document.getElementById(
+            "cartCount"
+        );
+
+
+    if(badge){
+
+        badge.textContent =
+            count;
+
+    }
+
+}
+
+
+/* =========================
+   GO CART
+========================= */
+
+function goCart(){
+
+    /*
+       আর alert দেখাবে না।
+       সরাসরি cart.html এ যাবে।
+    */
+
+    window.location.href =
+        "cart.html";
 
 }
 
@@ -1449,6 +1853,7 @@ function doSearch(){
         .getElementById("searchInput")
         .value
         .trim();
+
 
     if(q){
 
@@ -1466,16 +1871,23 @@ function doSearch(){
 
 
 /* =========================
-   CART
+   SEARCH ENTER
 ========================= */
 
-function goCart(){
+document
+    .getElementById("searchInput")
+    .addEventListener(
+        "keydown",
+        function(e){
 
-    alert(
-        "Professional cart & checkout will be connected next."
+            if(e.key === "Enter"){
+
+                doSearch();
+
+            }
+
+        }
     );
-
-}
 
 
 /* =========================
@@ -1498,7 +1910,10 @@ function showError(message){
 
             <a
                 href="index.html"
-                style="color:#f57224;font-weight:700;"
+                style="
+                    color:#f57224;
+                    font-weight:700;
+                "
             >
                 ← Back to Shop
             </a>
@@ -1511,15 +1926,19 @@ function showError(message){
 
 
 /* =========================
-   HELPERS
+   RATING STARS
 ========================= */
 
 function ratingStars(rating){
 
     let stars = "";
 
+
     const rounded =
-        Math.round(Number(rating || 0));
+        Math.round(
+            Number(rating || 0)
+        );
+
 
     for(let i=1;i<=5;i++){
 
@@ -1530,24 +1949,38 @@ function ratingStars(rating){
 
     }
 
+
     return stars;
 
 }
 
 
+/* =========================
+   ESCAPE HTML
+========================= */
+
 function escapeHtml(value){
 
     return String(value)
+
         .replace(/&/g,"&amp;")
+
         .replace(/</g,"&lt;")
+
         .replace(/>/g,"&gt;")
+
         .replace(/"/g,"&quot;")
+
         .replace(/'/g,"&#039;");
 
 }
 
 
-/* START */
+/* =========================
+   START
+========================= */
+
+updateCartCount();
 
 loadProduct();
 
