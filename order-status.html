@@ -18,10 +18,8 @@
 :root{
     --orange:#f57224;
     --orange-dark:#d95d12;
-    --dark:#111827;
     --text:#333;
     --muted:#777;
-    --border:#e5e7eb;
     --bg:#f5f5f5;
     --green:#16a34a;
     --red:#dc2626;
@@ -31,6 +29,11 @@ body{
     font-family:Arial,Helvetica,sans-serif;
     background:var(--bg);
     color:var(--text);
+}
+
+button,
+input{
+    font-family:inherit;
 }
 
 .header{
@@ -116,6 +119,11 @@ body{
 
 .search-btn:hover{
     background:var(--orange-dark);
+}
+
+.search-btn:disabled{
+    opacity:.6;
+    cursor:not-allowed;
 }
 
 .error{
@@ -224,6 +232,10 @@ body{
     border-bottom:0;
 }
 
+.product-left{
+    flex:1;
+}
+
 .product-name{
     font-weight:bold;
     font-size:14px;
@@ -233,13 +245,19 @@ body{
     color:#777;
     font-size:12px;
     margin-top:5px;
-    line-height:1.6;
+    line-height:1.7;
 }
 
 .product-price{
     color:var(--orange);
     font-weight:bold;
     white-space:nowrap;
+}
+
+.no-products{
+    padding:15px 0;
+    color:#777;
+    font-size:14px;
 }
 
 .summary{
@@ -353,6 +371,16 @@ body{
     color:#777;
 }
 
+.refresh-note{
+    margin-top:18px;
+    padding:12px;
+    background:#f9fafb;
+    border-radius:6px;
+    color:#777;
+    font-size:12px;
+    text-align:center;
+}
+
 @media(max-width:600px){
 
     .header-inner{
@@ -392,6 +420,10 @@ body{
         max-width:100%;
     }
 
+    .product{
+        align-items:flex-start;
+    }
+
 }
 
 </style>
@@ -399,7 +431,6 @@ body{
 </head>
 
 <body>
-
 
 <header class="header">
 
@@ -423,7 +454,6 @@ body{
 
 <div class="container">
 
-
     <!-- SEARCH -->
 
     <div class="track-box">
@@ -436,16 +466,17 @@ body{
             Enter your Order ID to check your order status.
         </p>
 
-
         <div class="search-area">
 
             <input
                 id="orderIdInput"
                 type="text"
-                placeholder="Example: 123"
+                placeholder="Example: 43"
+                autocomplete="off"
             >
 
             <button
+                id="trackButton"
                 class="search-btn"
                 onclick="trackOrder()"
             >
@@ -480,9 +511,9 @@ body{
 
             <div
                 id="statusBadge"
-                class="status-badge"
+                class="status-badge status-pending"
             >
-                Pending
+                🕐 Pending
             </div>
 
         </div>
@@ -553,6 +584,11 @@ body{
         </div>
 
         <div id="products">
+
+            <div class="loading">
+                Loading products...
+            </div>
+
         </div>
 
 
@@ -714,6 +750,8 @@ body{
         </div>
 
 
+        <!-- CANCELLED -->
+
         <div
             id="cancelledMessage"
             class="cancelled-message"
@@ -722,8 +760,14 @@ body{
         </div>
 
 
+        <div class="refresh-note">
+            🔄 Order status is loaded directly from our system.
+        </div>
+
     </div>
 
+
+    <!-- NOT FOUND -->
 
     <div
         id="notFound"
@@ -739,7 +783,6 @@ body{
         </p>
 
     </div>
-
 
 </div>
 
@@ -832,13 +875,10 @@ function normalizeStatus(status){
 function updateStatusBadge(status){
 
     const badge =
-        document.getElementById(
-            "statusBadge"
-        );
+        document.getElementById("statusBadge");
 
     const normalized =
         normalizeStatus(status);
-
 
     badge.className =
         "status-badge";
@@ -913,38 +953,30 @@ function updateTimeline(status){
 
 
     const pending =
-        document.getElementById(
-            "stepPending"
-        );
+        document.getElementById("stepPending");
 
     const confirmed =
-        document.getElementById(
-            "stepConfirmed"
-        );
+        document.getElementById("stepConfirmed");
 
     const shipped =
-        document.getElementById(
-            "stepShipped"
-        );
+        document.getElementById("stepShipped");
 
     const delivered =
-        document.getElementById(
-            "stepDelivered"
-        );
+        document.getElementById("stepDelivered");
 
     const cancelled =
-        document.getElementById(
-            "cancelledMessage"
-        );
+        document.getElementById("cancelledMessage");
 
 
-    [
+    const steps = [
         pending,
         confirmed,
         shipped,
         delivered
-    ]
-    .forEach(step=>{
+    ];
+
+
+    steps.forEach(step=>{
 
         step.classList.remove(
             "completed",
@@ -960,12 +992,12 @@ function updateTimeline(status){
 
     if(normalized === "cancelled"){
 
-        cancelled.style.display =
-            "block";
-
         pending.classList.add(
             "completed"
         );
+
+        cancelled.style.display =
+            "block";
 
         return;
 
@@ -981,9 +1013,7 @@ function updateTimeline(status){
 
 
     let currentIndex =
-        orderSteps.indexOf(
-            normalized
-        );
+        orderSteps.indexOf(normalized);
 
 
     if(currentIndex < 0){
@@ -991,14 +1021,6 @@ function updateTimeline(status){
         currentIndex = 0;
 
     }
-
-
-    const steps = [
-        pending,
-        confirmed,
-        shipped,
-        delivered
-    ];
 
 
     steps.forEach(
@@ -1038,14 +1060,17 @@ function formatDate(date){
 
     }
 
+
     const d =
         new Date(date);
+
 
     if(isNaN(d.getTime())){
 
         return "-";
 
     }
+
 
     return d.toLocaleString(
         "en-BD",
@@ -1057,6 +1082,101 @@ function formatDate(date){
             minute:"2-digit"
         }
     );
+
+}
+
+
+/* =====================================================
+   RENDER PRODUCTS
+===================================================== */
+
+function renderProducts(items){
+
+    const productsBox =
+        document.getElementById("products");
+
+
+    if(!items || !items.length){
+
+        productsBox.innerHTML = `
+            <div class="no-products">
+                No product information found.
+            </div>
+        `;
+
+        return;
+
+    }
+
+
+    productsBox.innerHTML =
+        items.map(item=>{
+
+            const price =
+                Number(item.price || 0);
+
+            const quantity =
+                Math.max(
+                    1,
+                    Number(item.quantity || 1)
+                );
+
+            const itemTotal =
+                price * quantity;
+
+
+            return `
+
+                <div class="product">
+
+                    <div class="product-left">
+
+                        <div class="product-name">
+
+                            ${escapeHtml(
+                                item.product_name ||
+                                "Product"
+                            )}
+
+                        </div>
+
+                        <div class="product-details">
+
+                            Quantity:
+                            ${quantity}
+
+                            ${
+                                item.size
+                                ?
+                                `<br>Size: ${escapeHtml(item.size)}`
+                                :
+                                ""
+                            }
+
+                            ${
+                                item.color
+                                ?
+                                `<br>Color: ${escapeHtml(item.color)}`
+                                :
+                                ""
+                            }
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="product-price">
+
+                        ৳${itemTotal.toLocaleString()}
+
+                    </div>
+
+                </div>
+
+            `;
+
+        }).join("");
 
 }
 
@@ -1093,6 +1213,19 @@ async function trackOrder(){
     }
 
 
+    const trackButton =
+        document.getElementById(
+            "trackButton"
+        );
+
+
+    trackButton.disabled =
+        true;
+
+    trackButton.textContent =
+        "Loading...";
+
+
     document.getElementById(
         "orderBox"
     ).style.display =
@@ -1108,17 +1241,27 @@ async function trackOrder(){
     try{
 
 
-        /* =================================================
+        /* ================================================
            GET ORDER
-        ================================================= */
+        ================================================ */
 
         const {
-            data:order,
-            error:orderError
+            data: order,
+            error: orderError
         } =
         await supabaseClient
         .from("orders")
-        .select("*")
+        .select(`
+            id,
+            customer_name,
+            phone,
+            address,
+            subtotal,
+            delivery_charge,
+            total,
+            status,
+            created_at
+        `)
         .eq("id",orderId)
         .maybeSingle();
 
@@ -1126,7 +1269,7 @@ async function trackOrder(){
         if(orderError){
 
             console.error(
-                "Order fetch error:",
+                "ORDER ERROR:",
                 orderError
             );
 
@@ -1147,24 +1290,38 @@ async function trackOrder(){
         }
 
 
-        /* =================================================
+        /* ================================================
            GET ORDER ITEMS
-        ================================================= */
+
+           IMPORTANT:
+           Product name, price, quantity, size, color
+           are stored in order_items.
+        ================================================ */
 
         const {
-            data:items,
-            error:itemsError
+            data: items,
+            error: itemsError
         } =
         await supabaseClient
         .from("order_items")
-        .select("*")
-        .eq("order_id",order.id);
+        .select(`
+            id,
+            order_id,
+            product_id,
+            product_name,
+            price,
+            quantity,
+            size,
+            color
+        `)
+        .eq("order_id",order.id)
+        .order("id",{ascending:true});
 
 
         if(itemsError){
 
             console.error(
-                "Items fetch error:",
+                "ORDER ITEMS ERROR:",
                 itemsError
             );
 
@@ -1173,9 +1330,20 @@ async function trackOrder(){
         }
 
 
-        /* =================================================
+        console.log(
+            "ORDER:",
+            order
+        );
+
+        console.log(
+            "ORDER ITEMS:",
+            items
+        );
+
+
+        /* ================================================
            BASIC INFO
-        ================================================= */
+        ================================================ */
 
         document.getElementById(
             "displayOrderId"
@@ -1209,9 +1377,9 @@ async function trackOrder(){
             );
 
 
-        /* =================================================
+        /* ================================================
            STATUS
-        ================================================= */
+        ================================================ */
 
         updateStatusBadge(
             order.status
@@ -1223,109 +1391,18 @@ async function trackOrder(){
         );
 
 
-        /* =================================================
+        /* ================================================
            PRODUCTS
-        ================================================= */
+        ================================================ */
 
-        const productsBox =
-            document.getElementById(
-                "products"
-            );
-
-
-        if(!items || !items.length){
-
-            productsBox.innerHTML = `
-                <div style="
-                    padding:15px 0;
-                    color:#777;
-                    font-size:14px;
-                ">
-                    No product information found.
-                </div>
-            `;
-
-        }
-
-        else{
-
-            productsBox.innerHTML =
-                items.map(item=>{
-
-                    const price =
-                        Number(
-                            item.price || 0
-                        );
-
-                    const quantity =
-                        Math.max(
-                            1,
-                            Number(
-                                item.quantity || 1
-                            )
-                        );
-
-                    const itemTotal =
-                        price * quantity;
+        renderProducts(
+            items
+        );
 
 
-                    return `
-
-                        <div class="product">
-
-                            <div>
-
-                                <div class="product-name">
-                                    ${escapeHtml(
-                                        item.product_name ||
-                                        "Product"
-                                    )}
-                                </div>
-
-                                <div class="product-details">
-
-                                    Quantity:
-                                    ${quantity}
-
-                                    ${
-                                        item.size
-                                        ?
-                                        `<br>Size: ${escapeHtml(item.size)}`
-                                        :
-                                        ""
-                                    }
-
-                                    ${
-                                        item.color
-                                        ?
-                                        `<br>Color: ${escapeHtml(item.color)}`
-                                        :
-                                        ""
-                                    }
-
-                                </div>
-
-                            </div>
-
-
-                            <div class="product-price">
-
-                                ৳${itemTotal.toLocaleString()}
-
-                            </div>
-
-                        </div>
-
-                    `;
-
-                }).join("");
-
-        }
-
-
-        /* =================================================
+        /* ================================================
            SUMMARY
-        ================================================= */
+        ================================================ */
 
         document.getElementById(
             "subtotal"
@@ -1351,9 +1428,9 @@ async function trackOrder(){
             ).toLocaleString();
 
 
-        /* =================================================
+        /* ================================================
            SHOW ORDER
-        ================================================= */
+        ================================================ */
 
         document.getElementById(
             "orderBox"
@@ -1368,6 +1445,7 @@ async function trackOrder(){
 
 
     }
+
     catch(error){
 
         console.error(
@@ -1379,6 +1457,16 @@ async function trackOrder(){
         showError(
             "Unable to load order. Please try again."
         );
+
+    }
+
+    finally{
+
+        trackButton.disabled =
+            false;
+
+        trackButton.textContent =
+            "🔍 Track Order";
 
     }
 
@@ -1407,8 +1495,9 @@ document
 
 /* =====================================================
    AUTO LOAD FROM URL
+
    Example:
-   order-status.html?id=123
+   order-status.html?id=43
 ===================================================== */
 
 document.addEventListener(
@@ -1419,6 +1508,7 @@ document.addEventListener(
             new URLSearchParams(
                 window.location.search
             );
+
 
         const id =
             params.get("id");
