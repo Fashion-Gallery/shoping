@@ -177,10 +177,6 @@ textarea{
     white-space:nowrap;
 }
 
-.summary{
-    height:max-content;
-}
-
 .summary-row{
     display:flex;
     justify-content:space-between;
@@ -354,7 +350,6 @@ textarea{
 
 <body>
 
-
 <header class="header">
 
     <div class="header-inner">
@@ -384,7 +379,6 @@ textarea{
         Checkout
     </div>
 
-
     <div
         id="errorBox"
         class="error"
@@ -401,7 +395,6 @@ textarea{
             <!-- LEFT -->
 
             <div>
-
 
                 <!-- CUSTOMER INFORMATION -->
 
@@ -497,7 +490,6 @@ textarea{
 
                 </div>
 
-
             </div>
 
 
@@ -571,7 +563,6 @@ textarea{
 
             </div>
 
-
         </div>
 
     </div>
@@ -610,7 +601,6 @@ textarea{
 
         </p>
 
-
         <a
             href="index.html"
             class="continue-btn"
@@ -648,8 +638,7 @@ supabase.createClient(
 
 
 /* =====================================================
-   IMPORTANT
-   SAME CART KEY AS cart.html + product.html
+   CART SETTINGS
 ===================================================== */
 
 const CART_KEY = "fg_cart";
@@ -669,18 +658,14 @@ function getCart(){
             localStorage.getItem(CART_KEY);
 
         if(!saved){
-
             return [];
-
         }
 
         const parsed =
             JSON.parse(saved);
 
         if(!Array.isArray(parsed)){
-
             return [];
-
         }
 
         return parsed;
@@ -807,12 +792,6 @@ function renderCheckout(){
         getCart();
 
 
-    /*
-       IMPORTANT:
-       Do NOT redirect to cart.html immediately
-       unless cart is actually empty.
-    */
-
     if(!cart.length){
 
         document.getElementById(
@@ -855,14 +834,6 @@ function renderCheckout(){
         );
 
 
-    /*
-       If cart already contains product
-       information, use it directly.
-
-       This is exactly what current
-       cart.html saves.
-    */
-
     productsBox.innerHTML =
         cart.map(item=>{
 
@@ -903,9 +874,7 @@ function renderCheckout(){
                     <div class="product-info">
 
                         <div class="product-name">
-
                             ${escapeHtml(name)}
-
                         </div>
 
                         <div class="product-details">
@@ -1116,7 +1085,6 @@ async function placeOrder(){
 
     try{
 
-
         /* =================================================
            CREATE ORDER
         ================================================= */
@@ -1230,7 +1198,7 @@ async function placeOrder(){
 
 
             /*
-               Remove incomplete order
+               Delete incomplete order
                if order_items failed.
             */
 
@@ -1258,7 +1226,18 @@ async function placeOrder(){
 
 
         /* =================================================
-           SHOW SUCCESS
+           SAVE ORDER ID
+           Extra backup for status page
+        ================================================= */
+
+        localStorage.setItem(
+            "fg_last_order_id",
+            String(order.id)
+        );
+
+
+        /* =================================================
+           SHOW SUCCESS BRIEFLY
         ================================================= */
 
         document.getElementById(
@@ -1283,6 +1262,19 @@ async function placeOrder(){
             top:0,
             behavior:"smooth"
         });
+
+
+        /* =================================================
+           GO TO ORDER STATUS PAGE
+        ================================================= */
+
+        setTimeout(function(){
+
+            window.location.href =
+                "order-status.html?id=" +
+                encodeURIComponent(order.id);
+
+        },1200);
 
 
     }catch(error){
