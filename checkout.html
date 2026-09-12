@@ -379,16 +379,19 @@ textarea{
 
 </header>
 
+
 <div class="container">
 
     <div class="title">
         Checkout
     </div>
 
+
     <div
         id="errorBox"
         class="error"
     ></div>
+
 
     <!-- CHECKOUT AREA -->
 
@@ -408,6 +411,7 @@ textarea{
                         Delivery Information
                     </h2>
 
+
                     <div class="field">
 
                         <label>
@@ -423,6 +427,7 @@ textarea{
                         >
 
                     </div>
+
 
                     <div class="field">
 
@@ -441,6 +446,7 @@ textarea{
 
                     </div>
 
+
                     <div class="field">
 
                         <label>
@@ -454,6 +460,7 @@ textarea{
                         ></textarea>
 
                     </div>
+
 
                     <div class="field">
 
@@ -469,6 +476,7 @@ textarea{
                     </div>
 
                 </div>
+
 
                 <!-- PRODUCTS -->
 
@@ -490,6 +498,7 @@ textarea{
 
             </div>
 
+
             <!-- RIGHT -->
 
             <div>
@@ -499,6 +508,7 @@ textarea{
                     <h2>
                         Order Summary
                     </h2>
+
 
                     <div class="summary-row">
 
@@ -512,6 +522,7 @@ textarea{
 
                     </div>
 
+
                     <div class="summary-row">
 
                         <span>
@@ -523,6 +534,7 @@ textarea{
                         </strong>
 
                     </div>
+
 
                     <div class="summary-row total">
 
@@ -536,6 +548,7 @@ textarea{
 
                     </div>
 
+
                     <button
                         id="placeOrderBtn"
                         class="place-btn"
@@ -543,6 +556,7 @@ textarea{
                     >
                         ✅ Place Order
                     </button>
+
 
                     <div class="secure">
 
@@ -558,6 +572,7 @@ textarea{
         </div>
 
     </div>
+
 
     <!-- SUCCESS -->
 
@@ -603,32 +618,45 @@ textarea{
 
 </div>
 
+
 <!-- SUPABASE -->
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
+
 <script>
 
+/* =====================================================
+   SUPABASE
+===================================================== */
+
 const SUPABASE_URL =
-"https://xqcvylogmlqykdmzjjpy.supabase.co";
+    "https://xqcvylogmlqykdmzjjpy.supabase.co";
 
 const SUPABASE_KEY =
-"sb_publishable_W6xGLr22hXDyWfR7EdKbYw_O5qZ9dJh";
+    "sb_publishable_W6xGLr22hXDyWfR7EdKbYw_O5qZ9dJh";
 
 const supabaseClient =
-supabase.createClient(
-    SUPABASE_URL,
-    SUPABASE_KEY
-);
+    supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_KEY
+    );
+
+
+/* =====================================================
+   SETTINGS
+===================================================== */
 
 const CART_KEY = "fg_cart";
 
 const DELIVERY_CHARGE = 60;
 
+let orderSubmitting = false;
 
-/* ================================
+
+/* =====================================================
    GET CART
-================================ */
+===================================================== */
 
 function getCart(){
 
@@ -638,19 +666,24 @@ function getCart(){
             localStorage.getItem(CART_KEY);
 
         if(!saved){
+
             return [];
+
         }
 
         const parsed =
             JSON.parse(saved);
 
         if(!Array.isArray(parsed)){
+
             return [];
+
         }
 
         return parsed;
 
-    }catch(error){
+    }
+    catch(error){
 
         console.error(
             "Cart read error:",
@@ -664,9 +697,9 @@ function getCart(){
 }
 
 
-/* ================================
+/* =====================================================
    ESCAPE HTML
-================================ */
+===================================================== */
 
 function escapeHtml(value){
 
@@ -680,24 +713,32 @@ function escapeHtml(value){
 }
 
 
-/* ================================
-   PHONE
-================================ */
+/* =====================================================
+   PHONE VALIDATION
+===================================================== */
 
 function validPhone(phone){
 
     const clean =
-        phone.replace(/[\s-]/g,"");
+        String(phone)
+            .replace(/[\s-]/g,"");
 
-    return /^(?:\+?880|0)1[3-9]\d{8}$/
-        .test(clean);
+    /*
+       Accepts:
+
+       01XXXXXXXXX
+       +8801XXXXXXXXX
+       8801XXXXXXXXX
+    */
+
+    return /^(?:\+?880|0)1[3-9]\d{8}$/.test(clean);
 
 }
 
 
-/* ================================
+/* =====================================================
    ERROR
-================================ */
+===================================================== */
 
 function showError(message){
 
@@ -728,9 +769,9 @@ function hideError(){
 }
 
 
-/* ================================
+/* =====================================================
    SUBTOTAL
-================================ */
+===================================================== */
 
 function calculateSubtotal(cart){
 
@@ -756,14 +797,15 @@ function calculateSubtotal(cart){
 }
 
 
-/* ================================
+/* =====================================================
    RENDER CHECKOUT
-================================ */
+===================================================== */
 
 function renderCheckout(){
 
     const cart =
         getCart();
+
 
     if(!cart.length){
 
@@ -874,6 +916,7 @@ function renderCheckout(){
                             }
 
                             <br>
+
                             Unit Price:
                             ৳${price.toLocaleString()}
 
@@ -923,16 +966,25 @@ function renderCheckout(){
 }
 
 
-/* ================================
+/* =====================================================
    PLACE ORDER
-================================ */
+===================================================== */
 
 async function placeOrder(){
 
+    if(orderSubmitting){
+
+        return;
+
+    }
+
+
     hideError();
+
 
     const cart =
         getCart();
+
 
     if(!cart.length){
 
@@ -973,6 +1025,8 @@ async function placeOrder(){
         .trim();
 
 
+    /* NAME */
+
     if(!name){
 
         showError(
@@ -987,6 +1041,8 @@ async function placeOrder(){
 
     }
 
+
+    /* PHONE */
 
     if(!phone){
 
@@ -1018,6 +1074,8 @@ async function placeOrder(){
     }
 
 
+    /* ADDRESS */
+
     if(!address){
 
         showError(
@@ -1046,6 +1104,11 @@ async function placeOrder(){
             "placeOrderBtn"
         );
 
+
+    orderSubmitting =
+        true;
+
+
     button.disabled =
         true;
 
@@ -1055,13 +1118,13 @@ async function placeOrder(){
 
     try{
 
-        /* ================================
+        /* ================================================
            CREATE ORDER
-        ================================= */
+        ================================================= */
 
         const {
-            data:order,
-            error:orderError
+            data: order,
+            error: orderError
         } =
         await supabaseClient
         .from("orders")
@@ -1099,19 +1162,34 @@ async function placeOrder(){
         if(orderError){
 
             console.error(
-                "Order error:",
+                "ORDER ERROR:",
                 orderError
             );
 
-            throw orderError;
+            throw new Error(
+                orderError.message ||
+                "Unable to create order."
+            );
 
         }
 
 
-        /* ================================
-           ORDER ITEMS
-           NOW INCLUDING IMAGE
-        ================================= */
+        if(!order || !order.id){
+
+            throw new Error(
+                "Order was created but Order ID was not returned."
+            );
+
+        }
+
+
+        /* ================================================
+           CREATE ORDER ITEMS
+           
+           IMPORTANT:
+           Only columns already used by your
+           order-status.html are inserted here.
+        ================================================= */
 
         const orderItems =
             cart.map(item=>({
@@ -1125,12 +1203,6 @@ async function placeOrder(){
                 product_name:
                     item.name ||
                     "Product",
-
-                image_url:
-                    item.image_url ||
-                    item.image ||
-                    item.product_image ||
-                    null,
 
                 price:
                     Number(
@@ -1157,7 +1229,7 @@ async function placeOrder(){
 
 
         const {
-            error:itemsError
+            error: itemsError
         } =
         await supabaseClient
         .from("order_items")
@@ -1169,9 +1241,12 @@ async function placeOrder(){
         if(itemsError){
 
             console.error(
-                "Order items error:",
+                "ORDER ITEMS ERROR:",
                 itemsError
             );
+
+
+            /* Delete incomplete order */
 
             await supabaseClient
                 .from("orders")
@@ -1181,23 +1256,27 @@ async function placeOrder(){
                     order.id
                 );
 
-            throw itemsError;
+
+            throw new Error(
+                itemsError.message ||
+                "Unable to save order products."
+            );
 
         }
 
 
-        /* ================================
+        /* ================================================
            CLEAR CART
-        ================================= */
+        ================================================= */
 
         localStorage.removeItem(
             CART_KEY
         );
 
 
-        /* ================================
+        /* ================================================
            SAVE LAST ORDER ID
-        ================================= */
+        ================================================= */
 
         localStorage.setItem(
             "fg_last_order_id",
@@ -1205,9 +1284,9 @@ async function placeOrder(){
         );
 
 
-        /* ================================
-           SUCCESS
-        ================================= */
+        /* ================================================
+           SUCCESS SCREEN
+        ================================================= */
 
         document.getElementById(
             "checkoutArea"
@@ -1233,9 +1312,9 @@ async function placeOrder(){
         });
 
 
-        /* ================================
-           GO TO STATUS PAGE
-        ================================= */
+        /* ================================================
+           GO TO ORDER STATUS PAGE
+        ================================================= */
 
         setTimeout(function(){
 
@@ -1263,6 +1342,10 @@ async function placeOrder(){
         );
 
 
+        orderSubmitting =
+            false;
+
+
         button.disabled =
             false;
 
@@ -1274,9 +1357,39 @@ async function placeOrder(){
 }
 
 
-/* ================================
+/* =====================================================
+   ENTER KEY
+===================================================== */
+
+document
+.getElementById("customerAddress")
+.addEventListener(
+    "keydown",
+    function(event){
+
+        /*
+           Ctrl + Enter can be used
+           to submit from address box.
+        */
+
+        if(
+            event.key === "Enter" &&
+            event.ctrlKey
+        ){
+
+            event.preventDefault();
+
+            placeOrder();
+
+        }
+
+    }
+);
+
+
+/* =====================================================
    START
-================================ */
+===================================================== */
 
 document.addEventListener(
     "DOMContentLoaded",
