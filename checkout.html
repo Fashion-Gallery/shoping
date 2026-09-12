@@ -135,11 +135,13 @@ textarea{
     color:var(--red);
 }
 
+/* PRODUCT */
+
 .product{
     display:flex;
     align-items:center;
-    gap:12px;
-    padding:12px 0;
+    gap:14px;
+    padding:14px 0;
     border-bottom:1px solid #eee;
 }
 
@@ -148,21 +150,23 @@ textarea{
 }
 
 .product img{
-    width:70px;
-    height:70px;
+    width:80px;
+    height:80px;
     object-fit:cover;
-    border-radius:5px;
+    border-radius:7px;
     background:#eee;
+    flex-shrink:0;
 }
 
 .product-info{
     flex:1;
+    min-width:0;
 }
 
 .product-name{
     font-weight:bold;
-    font-size:14px;
-    margin-bottom:5px;
+    font-size:15px;
+    margin-bottom:6px;
 }
 
 .product-details{
@@ -175,7 +179,10 @@ textarea{
     font-weight:bold;
     color:var(--orange);
     white-space:nowrap;
+    font-size:14px;
 }
+
+/* SUMMARY */
 
 .summary-row{
     display:flex;
@@ -334,8 +341,8 @@ textarea{
     }
 
     .product img{
-        width:60px;
-        height:60px;
+        width:70px;
+        height:70px;
     }
 
     .product-price{
@@ -372,7 +379,6 @@ textarea{
 
 </header>
 
-
 <div class="container">
 
     <div class="title">
@@ -384,13 +390,11 @@ textarea{
         class="error"
     ></div>
 
-
     <!-- CHECKOUT AREA -->
 
     <div id="checkoutArea">
 
         <div class="layout">
-
 
             <!-- LEFT -->
 
@@ -403,7 +407,6 @@ textarea{
                     <h2>
                         Delivery Information
                     </h2>
-
 
                     <div class="field">
 
@@ -420,7 +423,6 @@ textarea{
                         >
 
                     </div>
-
 
                     <div class="field">
 
@@ -439,7 +441,6 @@ textarea{
 
                     </div>
 
-
                     <div class="field">
 
                         <label>
@@ -450,11 +451,9 @@ textarea{
                         <textarea
                             id="customerAddress"
                             placeholder="House/Road, Village/Area, Upazila, District"
-                            autocomplete="street-address"
                         ></textarea>
 
                     </div>
-
 
                     <div class="field">
 
@@ -470,7 +469,6 @@ textarea{
                     </div>
 
                 </div>
-
 
                 <!-- PRODUCTS -->
 
@@ -492,7 +490,6 @@ textarea{
 
             </div>
 
-
             <!-- RIGHT -->
 
             <div>
@@ -502,7 +499,6 @@ textarea{
                     <h2>
                         Order Summary
                     </h2>
-
 
                     <div class="summary-row">
 
@@ -516,7 +512,6 @@ textarea{
 
                     </div>
 
-
                     <div class="summary-row">
 
                         <span>
@@ -528,7 +523,6 @@ textarea{
                         </strong>
 
                     </div>
-
 
                     <div class="summary-row total">
 
@@ -542,7 +536,6 @@ textarea{
 
                     </div>
 
-
                     <button
                         id="placeOrderBtn"
                         class="place-btn"
@@ -550,7 +543,6 @@ textarea{
                     >
                         ✅ Place Order
                     </button>
-
 
                     <div class="secure">
 
@@ -566,7 +558,6 @@ textarea{
         </div>
 
     </div>
-
 
     <!-- SUCCESS -->
 
@@ -612,17 +603,11 @@ textarea{
 
 </div>
 
-
 <!-- SUPABASE -->
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-
 <script>
-
-/* =====================================================
-   SUPABASE
-===================================================== */
 
 const SUPABASE_URL =
 "https://xqcvylogmlqykdmzjjpy.supabase.co";
@@ -636,19 +621,14 @@ supabase.createClient(
     SUPABASE_KEY
 );
 
-
-/* =====================================================
-   CART SETTINGS
-===================================================== */
-
 const CART_KEY = "fg_cart";
 
 const DELIVERY_CHARGE = 60;
 
 
-/* =====================================================
+/* ================================
    GET CART
-===================================================== */
+================================ */
 
 function getCart(){
 
@@ -684,9 +664,9 @@ function getCart(){
 }
 
 
-/* =====================================================
+/* ================================
    ESCAPE HTML
-===================================================== */
+================================ */
 
 function escapeHtml(value){
 
@@ -700,31 +680,29 @@ function escapeHtml(value){
 }
 
 
-/* =====================================================
-   PHONE VALIDATION
-===================================================== */
+/* ================================
+   PHONE
+================================ */
 
 function validPhone(phone){
 
     const clean =
         phone.replace(/[\s-]/g,"");
 
-    return /^(\+?880|0)1[3-9]\d{8}$/
+    return /^(?:\+?880|0)1[3-9]\d{8}$/
         .test(clean);
 
 }
 
 
-/* =====================================================
-   SHOW ERROR
-===================================================== */
+/* ================================
+   ERROR
+================================ */
 
 function showError(message){
 
     const box =
-        document.getElementById(
-            "errorBox"
-        );
+        document.getElementById("errorBox");
 
     box.textContent =
         message;
@@ -740,10 +718,6 @@ function showError(message){
 }
 
 
-/* =====================================================
-   HIDE ERROR
-===================================================== */
-
 function hideError(){
 
     document.getElementById(
@@ -754,9 +728,9 @@ function hideError(){
 }
 
 
-/* =====================================================
-   CALCULATE SUBTOTAL
-===================================================== */
+/* ================================
+   SUBTOTAL
+================================ */
 
 function calculateSubtotal(cart){
 
@@ -782,15 +756,14 @@ function calculateSubtotal(cart){
 }
 
 
-/* =====================================================
+/* ================================
    RENDER CHECKOUT
-===================================================== */
+================================ */
 
 function renderCheckout(){
 
     const cart =
         getCart();
-
 
     if(!cart.length){
 
@@ -855,7 +828,9 @@ function renderCheckout(){
 
             const image =
                 item.image_url ||
-                "https://placehold.co/70x70?text=Product";
+                item.image ||
+                item.product_image ||
+                "https://placehold.co/80x80?text=Product";
 
 
             return `
@@ -867,7 +842,7 @@ function renderCheckout(){
                         alt="${escapeHtml(name)}"
                         onerror="
                             this.onerror=null;
-                            this.src='https://placehold.co/70x70?text=Product';
+                            this.src='https://placehold.co/80x80?text=Product';
                         "
                     >
 
@@ -897,6 +872,10 @@ function renderCheckout(){
                                 :
                                 ""
                             }
+
+                            <br>
+                            Unit Price:
+                            ৳${price.toLocaleString()}
 
                         </div>
 
@@ -944,18 +923,16 @@ function renderCheckout(){
 }
 
 
-/* =====================================================
+/* ================================
    PLACE ORDER
-===================================================== */
+================================ */
 
 async function placeOrder(){
 
     hideError();
 
-
     const cart =
         getCart();
-
 
     if(!cart.length){
 
@@ -996,8 +973,6 @@ async function placeOrder(){
         .trim();
 
 
-    /* NAME */
-
     if(!name){
 
         showError(
@@ -1005,15 +980,13 @@ async function placeOrder(){
         );
 
         document
-            .getElementById("customerName")
-            .focus();
+        .getElementById("customerName")
+        .focus();
 
         return;
 
     }
 
-
-    /* PHONE */
 
     if(!phone){
 
@@ -1022,8 +995,8 @@ async function placeOrder(){
         );
 
         document
-            .getElementById("customerPhone")
-            .focus();
+        .getElementById("customerPhone")
+        .focus();
 
         return;
 
@@ -1037,15 +1010,13 @@ async function placeOrder(){
         );
 
         document
-            .getElementById("customerPhone")
-            .focus();
+        .getElementById("customerPhone")
+        .focus();
 
         return;
 
     }
 
-
-    /* ADDRESS */
 
     if(!address){
 
@@ -1054,8 +1025,8 @@ async function placeOrder(){
         );
 
         document
-            .getElementById("customerAddress")
-            .focus();
+        .getElementById("customerAddress")
+        .focus();
 
         return;
 
@@ -1075,7 +1046,6 @@ async function placeOrder(){
             "placeOrderBtn"
         );
 
-
     button.disabled =
         true;
 
@@ -1085,45 +1055,45 @@ async function placeOrder(){
 
     try{
 
-        /* =================================================
+        /* ================================
            CREATE ORDER
-        ================================================= */
+        ================================= */
 
         const {
             data:order,
             error:orderError
         } =
-            await supabaseClient
-            .from("orders")
-            .insert({
+        await supabaseClient
+        .from("orders")
+        .insert({
 
-                customer_name:
-                    name,
+            customer_name:
+                name,
 
-                phone:
-                    phone,
+            phone:
+                phone,
 
-                address:
-                    address,
+            address:
+                address,
 
-                note:
-                    note || null,
+            note:
+                note || null,
 
-                subtotal:
-                    subtotal,
+            subtotal:
+                subtotal,
 
-                delivery_charge:
-                    DELIVERY_CHARGE,
+            delivery_charge:
+                DELIVERY_CHARGE,
 
-                total:
-                    total,
+            total:
+                total,
 
-                status:
-                    "Pending"
+            status:
+                "Pending"
 
-            })
-            .select()
-            .single();
+        })
+        .select()
+        .single();
 
 
         if(orderError){
@@ -1138,9 +1108,10 @@ async function placeOrder(){
         }
 
 
-        /* =================================================
-           CREATE ORDER ITEMS
-        ================================================= */
+        /* ================================
+           ORDER ITEMS
+           NOW INCLUDING IMAGE
+        ================================= */
 
         const orderItems =
             cart.map(item=>({
@@ -1154,6 +1125,12 @@ async function placeOrder(){
                 product_name:
                     item.name ||
                     "Product",
+
+                image_url:
+                    item.image_url ||
+                    item.image ||
+                    item.product_image ||
+                    null,
 
                 price:
                     Number(
@@ -1182,11 +1159,11 @@ async function placeOrder(){
         const {
             error:itemsError
         } =
-            await supabaseClient
-            .from("order_items")
-            .insert(
-                orderItems
-            );
+        await supabaseClient
+        .from("order_items")
+        .insert(
+            orderItems
+        );
 
 
         if(itemsError){
@@ -1196,12 +1173,6 @@ async function placeOrder(){
                 itemsError
             );
 
-
-            /*
-               Delete incomplete order
-               if order_items failed.
-            */
-
             await supabaseClient
                 .from("orders")
                 .delete()
@@ -1210,25 +1181,23 @@ async function placeOrder(){
                     order.id
                 );
 
-
             throw itemsError;
 
         }
 
 
-        /* =================================================
+        /* ================================
            CLEAR CART
-        ================================================= */
+        ================================= */
 
         localStorage.removeItem(
             CART_KEY
         );
 
 
-        /* =================================================
-           SAVE ORDER ID
-           Extra backup for status page
-        ================================================= */
+        /* ================================
+           SAVE LAST ORDER ID
+        ================================= */
 
         localStorage.setItem(
             "fg_last_order_id",
@@ -1236,9 +1205,9 @@ async function placeOrder(){
         );
 
 
-        /* =================================================
-           SHOW SUCCESS BRIEFLY
-        ================================================= */
+        /* ================================
+           SUCCESS
+        ================================= */
 
         document.getElementById(
             "checkoutArea"
@@ -1264,20 +1233,23 @@ async function placeOrder(){
         });
 
 
-        /* =================================================
-           GO TO ORDER STATUS PAGE
-        ================================================= */
+        /* ================================
+           GO TO STATUS PAGE
+        ================================= */
 
         setTimeout(function(){
 
             window.location.href =
                 "order-status.html?id=" +
-                encodeURIComponent(order.id);
+                encodeURIComponent(
+                    order.id
+                );
 
         },1200);
 
 
-    }catch(error){
+    }
+    catch(error){
 
         console.error(
             "PLACE ORDER ERROR:",
@@ -1294,7 +1266,6 @@ async function placeOrder(){
         button.disabled =
             false;
 
-
         button.textContent =
             "✅ Place Order";
 
@@ -1303,9 +1274,9 @@ async function placeOrder(){
 }
 
 
-/* =====================================================
+/* ================================
    START
-===================================================== */
+================================ */
 
 document.addEventListener(
     "DOMContentLoaded",
