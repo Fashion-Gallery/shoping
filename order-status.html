@@ -244,6 +244,7 @@ input{
 
 .product-left{
     flex:1;
+    min-width:0;
 }
 
 .product-name{
@@ -386,6 +387,14 @@ input{
     text-align:center;
 }
 
+.loading{
+    text-align:center;
+    padding:25px;
+    color:#777;
+}
+
+/* MOBILE */
+
 @media(max-width:600px){
 
     .header-inner{
@@ -489,7 +498,7 @@ input{
             <input
                 id="orderIdInput"
                 type="text"
-                placeholder="Example: 43"
+                placeholder="Example: 45"
                 autocomplete="off"
             >
 
@@ -553,6 +562,7 @@ input{
 
             </div>
 
+
             <div class="info-row">
 
                 <span>
@@ -565,6 +575,7 @@ input{
 
             </div>
 
+
             <div class="info-row">
 
                 <span>
@@ -576,6 +587,7 @@ input{
                 </strong>
 
             </div>
+
 
             <div class="info-row">
 
@@ -623,6 +635,7 @@ input{
 
             </div>
 
+
             <div class="summary-row">
 
                 <span>
@@ -634,6 +647,7 @@ input{
                 </strong>
 
             </div>
+
 
             <div class="summary-row total">
 
@@ -804,20 +818,31 @@ input{
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-
 <script>
 
+/* =====================================================
+   SUPABASE
+===================================================== */
+
 const SUPABASE_URL =
-"https://xqcvylogmlqykdmzjjpy.supabase.co";
+    "https://xqcvylogmlqykdmzjjpy.supabase.co";
 
 const SUPABASE_KEY =
-"sb_publishable_W6xGLr22hXDyWfR7EdKbYw_O5qZ9dJh";
+    "sb_publishable_W6xGLr22hXDyWfR7EdKbYw_O5qZ9dJh";
 
 const supabaseClient =
-supabase.createClient(
-    SUPABASE_URL,
-    SUPABASE_KEY
-);
+    supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_KEY
+    );
+
+
+/* =====================================================
+   FALLBACK IMAGE
+===================================================== */
+
+const FALLBACK_IMAGE =
+    "https://placehold.co/85x85?text=Product";
 
 
 /* =====================================================
@@ -851,6 +876,11 @@ function showError(message){
     box.style.display =
         "block";
 
+    window.scrollTo({
+        top:0,
+        behavior:"smooth"
+    });
+
 }
 
 
@@ -865,7 +895,7 @@ function hideError(){
 
 
 /* =====================================================
-   STATUS
+   STATUS NORMALIZE
 ===================================================== */
 
 function normalizeStatus(status){
@@ -877,6 +907,10 @@ function normalizeStatus(status){
 }
 
 
+/* =====================================================
+   STATUS BADGE
+===================================================== */
+
 function updateStatusBadge(status){
 
     const badge =
@@ -887,6 +921,7 @@ function updateStatusBadge(status){
 
     badge.className =
         "status-badge";
+
 
     if(normalized === "confirmed"){
 
@@ -970,12 +1005,14 @@ function updateTimeline(status){
     const cancelled =
         document.getElementById("cancelledMessage");
 
+
     const steps = [
         pending,
         confirmed,
         shipped,
         delivered
     ];
+
 
     steps.forEach(step=>{
 
@@ -986,8 +1023,12 @@ function updateTimeline(status){
 
     });
 
+
     cancelled.style.display =
         "none";
+
+
+    /* CANCELLED */
 
     if(normalized === "cancelled"){
 
@@ -1002,6 +1043,7 @@ function updateTimeline(status){
 
     }
 
+
     const orderSteps = [
         "pending",
         "confirmed",
@@ -1009,14 +1051,17 @@ function updateTimeline(status){
         "delivered"
     ];
 
+
     let currentIndex =
         orderSteps.indexOf(normalized);
+
 
     if(currentIndex < 0){
 
         currentIndex = 0;
 
     }
+
 
     steps.forEach(
         (step,index)=>{
@@ -1053,12 +1098,15 @@ function formatDate(date){
         return "-";
     }
 
+
     const d =
         new Date(date);
+
 
     if(isNaN(d.getTime())){
         return "-";
     }
+
 
     return d.toLocaleString(
         "en-BD",
@@ -1075,11 +1123,116 @@ function formatDate(date){
 
 
 /* =====================================================
-   PRODUCT IMAGE FALLBACK
+   FIND PRODUCT IMAGE
 ===================================================== */
 
-const FALLBACK_IMAGE =
-"https://placehold.co/85x85?text=Product";
+async function getProductImages(items){
+
+    const missingProductIds =
+        items
+        .filter(item =>
+            !item.image_url &&
+            item.product_id
+        )
+        .map(item =>
+            item.product_id
+        );
+
+
+    if(!missingProductIds.length){
+
+        return items;
+
+    }
+
+
+    try{
+
+        const {
+            data: products,
+            error
+        } =
+        await supabaseClient
+        .from("products")
+        .select(`
+            id,
+            image_url
+        `)
+        .in(
+            "id",
+            missingProductIds
+        );
+
+
+        if(error){
+
+            console.warn(
+                "PRODUCT IMAGE LOOKUP ERROR:",
+                error
+            );
+
+            return items;
+
+        }
+
+
+        if(!products || !products.length){
+
+            return items;
+
+        }
+
+
+        const productMap =
+            new Map(
+                products.map(product => [
+                    String(product.id),
+                    product.image_url
+                ])
+            );
+
+
+        return items.map(item => {
+
+            if(
+                !item.image_url &&
+                item.product_id
+            ){
+
+                const image =
+                    productMap.get(
+                        String(item.product_id)
+                    );
+
+                if(image){
+
+                    return {
+                        ...item,
+                        image_url:image
+                    };
+
+                }
+
+            }
+
+            return item;
+
+        });
+
+    }
+
+    catch(error){
+
+        console.warn(
+            "PRODUCT IMAGE FALLBACK ERROR:",
+            error
+        );
+
+        return items;
+
+    }
+
+}
 
 
 /* =====================================================
@@ -1090,6 +1243,7 @@ function renderProducts(items){
 
     const productsBox =
         document.getElementById("products");
+
 
     if(!items || !items.length){
 
@@ -1103,6 +1257,7 @@ function renderProducts(items){
 
     }
 
+
     productsBox.innerHTML =
         items.map(item=>{
 
@@ -1110,21 +1265,30 @@ function renderProducts(items){
                 item.product_name ||
                 "Product";
 
+
             const price =
-                Number(item.price || 0);
+                Number(
+                    item.price || 0
+                );
+
 
             const quantity =
                 Math.max(
                     1,
-                    Number(item.quantity || 1)
+                    Number(
+                        item.quantity || 1
+                    )
                 );
+
 
             const itemTotal =
                 price * quantity;
 
+
             const image =
                 item.image_url ||
                 FALLBACK_IMAGE;
+
 
             return `
 
@@ -1134,6 +1298,7 @@ function renderProducts(items){
                         class="product-image"
                         src="${escapeHtml(image)}"
                         alt="${escapeHtml(name)}"
+                        loading="lazy"
                         onerror="
                             this.onerror=null;
                             this.src='${FALLBACK_IMAGE}';
@@ -1199,13 +1364,16 @@ async function trackOrder(){
 
     hideError();
 
+
     const input =
         document.getElementById(
             "orderIdInput"
         );
 
+
     const orderId =
         input.value.trim();
+
 
     if(!orderId){
 
@@ -1219,10 +1387,12 @@ async function trackOrder(){
 
     }
 
+
     const trackButton =
         document.getElementById(
             "trackButton"
         );
+
 
     trackButton.disabled =
         true;
@@ -1230,15 +1400,18 @@ async function trackOrder(){
     trackButton.textContent =
         "Loading...";
 
+
     document.getElementById(
         "orderBox"
     ).style.display =
         "none";
 
+
     document.getElementById(
         "notFound"
     ).style.display =
         "none";
+
 
     try{
 
@@ -1263,7 +1436,10 @@ async function trackOrder(){
             status,
             created_at
         `)
-        .eq("id",orderId)
+        .eq(
+            "id",
+            orderId
+        )
         .maybeSingle();
 
 
@@ -1296,7 +1472,7 @@ async function trackOrder(){
         ================================================= */
 
         const {
-            data: items,
+            data: rawItems,
             error: itemsError
         } =
         await supabaseClient
@@ -1306,14 +1482,22 @@ async function trackOrder(){
             order_id,
             product_id,
             product_name,
+            image_url,
             price,
             quantity,
             size,
-            color,
-            image_url
+            color
         `)
-        .eq("order_id",order.id)
-        .order("id",{ascending:true});
+        .eq(
+            "order_id",
+            order.id
+        )
+        .order(
+            "id",
+            {
+                ascending:true
+            }
+        );
 
 
         if(itemsError){
@@ -1329,6 +1513,16 @@ async function trackOrder(){
 
 
         /* =================================================
+           PRODUCT IMAGE FALLBACK
+        ================================================= */
+
+        const items =
+            await getProductImages(
+                rawItems || []
+            );
+
+
+        /* =================================================
            CUSTOMER INFORMATION
         ================================================= */
 
@@ -1337,20 +1531,24 @@ async function trackOrder(){
         ).textContent =
             order.id;
 
+
         document.getElementById(
             "customerName"
         ).textContent =
             order.customer_name || "-";
+
 
         document.getElementById(
             "customerPhone"
         ).textContent =
             order.phone || "-";
 
+
         document.getElementById(
             "customerAddress"
         ).textContent =
             order.address || "-";
+
 
         document.getElementById(
             "orderDate"
@@ -1367,6 +1565,7 @@ async function trackOrder(){
         updateStatusBadge(
             order.status
         );
+
 
         updateTimeline(
             order.status
@@ -1393,12 +1592,14 @@ async function trackOrder(){
                 order.subtotal || 0
             ).toLocaleString();
 
+
         document.getElementById(
             "delivery"
         ).textContent =
             Number(
                 order.delivery_charge || 0
             ).toLocaleString();
+
 
         document.getElementById(
             "total"
@@ -1417,6 +1618,7 @@ async function trackOrder(){
         ).style.display =
             "block";
 
+
         window.scrollTo({
             top:0,
             behavior:"smooth"
@@ -1430,6 +1632,7 @@ async function trackOrder(){
             "TRACK ORDER ERROR:",
             error
         );
+
 
         showError(
             error.message ||
@@ -1484,8 +1687,10 @@ document.addEventListener(
                 window.location.search
             );
 
+
         const id =
             params.get("id");
+
 
         if(id){
 
