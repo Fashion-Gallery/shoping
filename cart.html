@@ -16,7 +16,6 @@
 :root{
     --orange:#f57224;
     --orange-dark:#d95d12;
-    --dark:#111827;
     --text:#333;
     --muted:#777;
     --border:#e5e7eb;
@@ -112,6 +111,7 @@ button{
     object-fit:cover;
     border-radius:6px;
     background:#eee;
+    border:1px solid #eee;
 }
 
 .item-name{
@@ -221,6 +221,8 @@ button{
 
 .summary{
     height:max-content;
+    position:sticky;
+    top:20px;
 }
 
 .summary h2{
@@ -274,6 +276,12 @@ button{
     line-height:1.6;
 }
 
+.stock-warning{
+    color:#b91c1c;
+    font-size:12px;
+    margin-top:5px;
+}
+
 @media(max-width:800px){
 
     .layout{
@@ -282,6 +290,7 @@ button{
 
     .summary{
         order:-1;
+        position:static;
     }
 
 }
@@ -295,6 +304,7 @@ button{
     .cart-item{
         grid-template-columns:75px 1fr;
         gap:12px;
+        align-items:start;
     }
 
     .cart-image{
@@ -305,6 +315,7 @@ button{
     .item-total{
         grid-column:2;
         text-align:left;
+        margin-top:-5px;
     }
 
     .item-name{
@@ -359,7 +370,6 @@ button{
         Shopping Cart 🛒
     </div>
 
-
     <div class="layout">
 
         <div class="cart-box">
@@ -380,7 +390,6 @@ button{
             <h2>
                 Order Summary
             </h2>
-
 
             <div class="summary-row">
 
@@ -454,56 +463,68 @@ button{
 
 <script>
 
-/* =========================
+/* =====================================================
    SUPABASE
-========================= */
+===================================================== */
 
 const SUPABASE_URL =
-"https://xqcvylogmlqykdmzjjpy.supabase.co";
+    "https://xqcvylogmlqykdmzjjpy.supabase.co";
 
 const SUPABASE_KEY =
-"sb_publishable_W6xGLr22hXDyWfR7EdKbYw_O5qZ9dJh";
+    "sb_publishable_W6xGLr22hXDyWfR7EdKbYw_O5qZ9dJh";
 
 const supabaseClient =
-supabase.createClient(
-    SUPABASE_URL,
-    SUPABASE_KEY,
-    {
-        auth:{
-            persistSession:true,
-            autoRefreshToken:true,
-            detectSessionInUrl:true
+    supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_KEY,
+        {
+            auth:{
+                persistSession:true,
+                autoRefreshToken:true,
+                detectSessionInUrl:true
+            }
         }
-    }
-);
+    );
 
 
-/* =========================
-   DELIVERY
-========================= */
+/* =====================================================
+   SETTINGS
+===================================================== */
 
 const DELIVERY_CHARGE = 60;
 
-
-/* =========================
-   CART KEY
-   SAME AS index.html
-   SAME AS product.html
-========================= */
-
 const CART_KEY = "fg_cart";
 
+const FALLBACK_IMAGE =
+    "https://placehold.co/100x100?text=Product";
 
-/* =========================
+
+/* =====================================================
    CART
-========================= */
+===================================================== */
 
 let cart = [];
 
 
-/* =========================
+/* =====================================================
+   ESCAPE HTML
+===================================================== */
+
+function escapeHtml(value){
+
+    return String(value ?? "")
+        .replace(/&/g,"&amp;")
+        .replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;")
+        .replace(/"/g,"&quot;")
+        .replace(/'/g,"&#039;");
+
+}
+
+
+/* =====================================================
    GET CART
-========================= */
+===================================================== */
 
 function getCart(){
 
@@ -519,11 +540,30 @@ function getCart(){
         const parsed =
             JSON.parse(saved);
 
-        return Array.isArray(parsed)
-            ? parsed
-            : [];
+        if(!Array.isArray(parsed)){
+            return [];
+        }
 
-    }catch(error){
+        return parsed
+            .filter(item => item && item.id != null)
+            .map(item => ({
+
+                id:item.id,
+
+                quantity:Math.max(
+                    1,
+                    Number(item.quantity || 1)
+                ),
+
+                size:item.size || "",
+
+                color:item.color || ""
+
+            }));
+
+    }
+
+    catch(error){
 
         console.error(
             "Cart read error:",
@@ -537,23 +577,36 @@ function getCart(){
 }
 
 
-/* =========================
+/* =====================================================
    SAVE CART
-========================= */
+===================================================== */
 
 function saveCart(){
 
-    localStorage.setItem(
-        CART_KEY,
-        JSON.stringify(cart)
-    );
+    try{
+
+        localStorage.setItem(
+            CART_KEY,
+            JSON.stringify(cart)
+        );
+
+    }
+
+    catch(error){
+
+        console.error(
+            "Cart save error:",
+            error
+        );
+
+    }
 
 }
 
 
-/* =========================
-   LOAD PRODUCTS
-========================= */
+/* =====================================================
+   LOAD CART
+===================================================== */
 
 async function loadCart(){
 
@@ -571,22 +624,12 @@ async function loadCart(){
     }
 
 
-    /*
-       Product Details page stores only:
-
-       id
-       quantity
-       size
-       color
-
-       So here we get the real product
-       information from Supabase.
-    */
-
     const ids =
-        cart
-        .map(item => Number(item.id))
-        .filter(id => !isNaN(id));
+        [...new Set(
+            cart
+                .map(item => item.id)
+                .filter(id => id !== null && id !== undefined)
+        )];
 
 
     if(!ids.length){
@@ -611,17 +654,124 @@ async function loadCart(){
     `;
 
 
-    const {data,error} =
+    try{
+
+        const {
+            data:products,
+            error
+        } =
         await supabaseClient
         .from("products")
-        .select("*")
+        .select(`
+            id,
+            name,
+            price,
+            image_url,
+            stock
+        `)
         .in("id",ids);
 
 
-    if(error){
+        if(error){
+
+            console.error(
+                "Supabase cart error:",
+                error
+            );
+
+            throw error;
+
+        }
+
+
+        const productList =
+            products || [];
+
+
+        const validCart = [];
+
+
+        cart.forEach(item => {
+
+            const product =
+                productList.find(
+                    p =>
+                    String(p.id) === String(item.id)
+                );
+
+
+            if(!product){
+                return;
+            }
+
+
+            let quantity =
+                Math.max(
+                    1,
+                    Number(item.quantity || 1)
+                );
+
+
+            const stock =
+                Number(product.stock || 0);
+
+
+            /*
+               If stock exists and the saved
+               quantity is greater than stock,
+               automatically reduce it.
+            */
+
+            if(
+                stock > 0 &&
+                quantity > stock
+            ){
+
+                quantity = stock;
+
+            }
+
+
+            validCart.push({
+
+                id:product.id,
+
+                quantity:quantity,
+
+                size:item.size || "",
+
+                color:item.color || "",
+
+                name:
+                    product.name ||
+                    "Product",
+
+                price:
+                    Number(product.price || 0),
+
+                image_url:
+                    product.image_url ||
+                    "",
+
+                stock:stock
+
+            });
+
+        });
+
+
+        cart = validCart;
+
+        saveCart();
+
+        renderCart();
+
+    }
+
+    catch(error){
 
         console.error(
-            "Supabase cart error:",
+            "LOAD CART ERROR:",
             error
         );
 
@@ -641,81 +791,14 @@ async function loadCart(){
 
         `;
 
-        return;
-
     }
-
-
-    const products =
-        data || [];
-
-
-    /*
-       Attach product information
-       to every cart item.
-    */
-
-    const validCart = [];
-
-
-    cart.forEach(item => {
-
-        const product =
-            products.find(
-                p =>
-                Number(p.id) === Number(item.id)
-            );
-
-
-        if(product){
-
-            validCart.push({
-
-                id:product.id,
-
-                quantity:
-                    Math.max(
-                        1,
-                        Number(item.quantity || 1)
-                    ),
-
-                size:
-                    item.size || "",
-
-                color:
-                    item.color || "",
-
-                name:
-                    product.name || "Product",
-
-                price:
-                    Number(product.price || 0),
-
-                image_url:
-                    product.image_url || "",
-
-                stock:
-                    Number(product.stock || 0)
-
-            });
-
-        }
-
-    });
-
-
-    cart = validCart;
-
-    saveCart();
-
-    renderCart();
 
 }
 
 
-/* =========================
+/* =====================================================
    EMPTY CART
-========================= */
+===================================================== */
 
 function renderEmptyCart(){
 
@@ -749,31 +832,60 @@ function renderEmptyCart(){
     `;
 
 
-    document.getElementById(
-        "subtotal"
-    ).textContent = "0";
-
-
-    document.getElementById(
-        "delivery"
-    ).textContent = "0";
-
-
-    document.getElementById(
-        "total"
-    ).textContent = "0";
-
-
-    document.getElementById(
-        "checkoutButton"
-    ).disabled = true;
+    updateSummary(0);
 
 }
 
 
-/* =========================
+/* =====================================================
+   UPDATE SUMMARY
+===================================================== */
+
+function updateSummary(subtotal){
+
+    subtotal =
+        Number(subtotal || 0);
+
+
+    const delivery =
+        subtotal > 0
+            ? DELIVERY_CHARGE
+            : 0;
+
+
+    const total =
+        subtotal + delivery;
+
+
+    document.getElementById(
+        "subtotal"
+    ).textContent =
+        subtotal.toLocaleString();
+
+
+    document.getElementById(
+        "delivery"
+    ).textContent =
+        delivery.toLocaleString();
+
+
+    document.getElementById(
+        "total"
+    ).textContent =
+        total.toLocaleString();
+
+
+    document.getElementById(
+        "checkoutButton"
+    ).disabled =
+        cart.length === 0;
+
+}
+
+
+/* =====================================================
    RENDER CART
-========================= */
+===================================================== */
 
 function renderCart(){
 
@@ -802,21 +914,47 @@ function renderCart(){
             const price =
                 Number(item.price || 0);
 
+
             const quantity =
                 Math.max(
                     1,
                     Number(item.quantity || 1)
                 );
 
+
             const itemTotal =
                 price * quantity;
+
 
             subtotal += itemTotal;
 
 
             const image =
                 item.image_url ||
-                "https://placehold.co/100x100?text=Product";
+                FALLBACK_IMAGE;
+
+
+            const stock =
+                Number(item.stock || 0);
+
+
+            let stockWarning = "";
+
+
+            if(
+                stock > 0 &&
+                quantity >= stock
+            ){
+
+                stockWarning = `
+
+                    <div class="stock-warning">
+                        Only ${stock} available
+                    </div>
+
+                `;
+
+            }
 
 
             return `
@@ -827,9 +965,10 @@ function renderCart(){
                         class="cart-image"
                         src="${escapeHtml(image)}"
                         alt="${escapeHtml(item.name)}"
+                        loading="lazy"
                         onerror="
                             this.onerror=null;
-                            this.src='https://placehold.co/100x100?text=Product';
+                            this.src='${FALLBACK_IMAGE}';
                         "
                     >
 
@@ -837,12 +976,10 @@ function renderCart(){
                     <div>
 
                         <div class="item-name">
-
                             ${escapeHtml(
                                 item.name ||
                                 "Product"
                             )}
-
                         </div>
 
 
@@ -884,8 +1021,10 @@ function renderCart(){
                         <div class="qty-box">
 
                             <button
+                                type="button"
                                 class="qty-btn"
                                 onclick="changeQty(${index},-1)"
+                                aria-label="Decrease quantity"
                             >
                                 −
                             </button>
@@ -899,8 +1038,10 @@ function renderCart(){
 
 
                             <button
+                                type="button"
                                 class="qty-btn"
                                 onclick="changeQty(${index},1)"
+                                aria-label="Increase quantity"
                             >
                                 +
                             </button>
@@ -908,7 +1049,11 @@ function renderCart(){
                         </div>
 
 
+                        ${stockWarning}
+
+
                         <button
+                            type="button"
                             class="remove-btn"
                             onclick="removeItem(${index})"
                         >
@@ -932,42 +1077,14 @@ function renderCart(){
         .join("");
 
 
-    const delivery =
-        DELIVERY_CHARGE;
-
-
-    const total =
-        subtotal + delivery;
-
-
-    document.getElementById(
-        "subtotal"
-    ).textContent =
-        subtotal.toLocaleString();
-
-
-    document.getElementById(
-        "delivery"
-    ).textContent =
-        delivery.toLocaleString();
-
-
-    document.getElementById(
-        "total"
-    ).textContent =
-        total.toLocaleString();
-
-
-    document.getElementById(
-        "checkoutButton"
-    ).disabled = false;
+    updateSummary(subtotal);
 
 }
 
 
-/* =========================
+/* =====================================================
    CHANGE QUANTITY
-========================= */
+===================================================== */
 
 function changeQty(index,change){
 
@@ -977,13 +1094,14 @@ function changeQty(index,change){
 
 
     const current =
-        Number(
-            cart[index].quantity || 1
+        Math.max(
+            1,
+            Number(cart[index].quantity || 1)
         );
 
 
     let newQty =
-        current + change;
+        current + Number(change);
 
 
     if(newQty < 1){
@@ -992,11 +1110,6 @@ function changeQty(index,change){
 
     }
 
-
-    /*
-       Respect product stock
-       when stock is available.
-    */
 
     const stock =
         Number(
@@ -1029,9 +1142,9 @@ function changeQty(index,change){
 }
 
 
-/* =========================
+/* =====================================================
    REMOVE ITEM
-========================= */
+===================================================== */
 
 function removeItem(index){
 
@@ -1065,9 +1178,9 @@ function removeItem(index){
 }
 
 
-/* =========================
+/* =====================================================
    CHECKOUT
-========================= */
+===================================================== */
 
 function goCheckout(){
 
@@ -1082,11 +1195,6 @@ function goCheckout(){
     }
 
 
-    /*
-       Make sure latest cart is saved
-       before opening checkout.
-    */
-
     saveCart();
 
 
@@ -1096,30 +1204,16 @@ function goCheckout(){
 }
 
 
-/* =========================
-   ESCAPE HTML
-========================= */
-
-function escapeHtml(value){
-
-    return String(value)
-        .replace(/&/g,"&amp;")
-        .replace(/</g,"&lt;")
-        .replace(/>/g,"&gt;")
-        .replace(/"/g,"&quot;")
-        .replace(/'/g,"&#039;");
-
-}
-
-
-/* =========================
+/* =====================================================
    START
-========================= */
+===================================================== */
 
 document.addEventListener(
     "DOMContentLoaded",
-    ()=>{
+    function(){
+
         loadCart();
+
     }
 );
 
